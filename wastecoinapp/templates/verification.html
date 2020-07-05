@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block body%}
+{% load static %}
+<div class="login-card">
+  <div class="reg-header text-center"> 
+    <a href="{% url 'home' %}" style="color: #fff;">
+      <img src="{% static 'left_chevron.svg' %}" class="back-button mobile-logo float-left" alt="logo" />
+      </a>
+    Wallet Verification</div>
+  <div class="mobile-logo-div" style="margin:auto; width:50%;">
+    <img src="{% static 'waste_coin_logo.svg' %}" class="logo mobile-logo" alt="logo" />
+  </div>
+  {% if error == "0" %}
+    <div class='text-center alert alert-info' id="message_div">{{message}}.</div>
+  {% else %}
+    <div class='text-center text-danger' id="message_div">{{message}}</div>
+  {% endif %}
+  <form class="form-control reg-form" action="{% url 'verify' %}" method="POST">
+    {% csrf_token %}
+  <div class="row">
+      <div class="col-md-6" style="margin:auto; margin-top:50px;">
+         <div class="form-group text-left">
+            <input type="text" 
+                class="form-control-login" 
+                name="otp" 
+                placeholder=" * * * * * *"
+                style="padding-left: 40%; padding-right:40%;"
+            />
+          </div>
+      </div>
+  </div>
+  <div class="col-md-12 submit-reg-div">
+    <button type="submit" class="reg-submit" >Verify Account</button>
+       <a href="{% url 'resend_code' %}"><p>Send code again </p></a>
+   </div>
+  </form>
+      
+
+</div>
+{% endblock %}
+
+

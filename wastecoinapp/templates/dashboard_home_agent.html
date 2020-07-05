@@ -1,0 +1,269 @@
+{% extends "dashboard_layout.html" %}
+{% block body%}
+{% load static %}
+<div class="row">
+  <nav class="sidenav">
+    
+    <ul class="navbar-nav mr-auto sidenav-ul">
+        <li class="nav-item sidenav-li" style="background-color: #2ad2be50;border-radius:5px; padding:1% 5%;">
+            <a class="nav-link" href="{% url 'dashboard_agent' %}"><img src="{% static 'home.svg' %}" class="logo" alt="Home-logo" /><span class="sidenav-span">&nbsp;Home</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link" href="{% url 'profile_agent' %}"><img src="{% static 'profile.svg' %}" class="logo" alt="Profile-logo" /> <span class="sidenav-span">Profile</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link " href="{% url 'wallet_agent' %}"><img src="{% static 'wallet.svg' %}" class="logo" alt="Wallet-logo" /><span class="sidenav-span">&nbsp;Wallet</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link" href="{% url 'notification' %}"><img src="{% static 'notification.svg' %}"class="logo" alt="Notification-logo" /> 
+            {% if unreadMsg == 0 %}
+            <span class="sidenav-span">Notification</span>
+            {% else %}
+            <span class="sidenav-span">Notification</span><span class="badge badge-info">{{unreadMsg}}</span>
+            {% endif %}
+        </a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link " href="{% url 'signout' %}"><img src="{% static 'logout.svg' %}" class="logo" alt="Logout-logo" /><span class="sidenav-span">&nbsp;Logout</span></a>
+        </li>
+    </ul>
+    <div class="sidenav-ul-mobile">
+        <div class="menu-box">
+            <a href="{% url 'notification' %}">
+                <img src="{% static 'notification-white.svg' %}" class="logo" alt="Notification-logo" />
+                {% if unreadMsg == 0 %}
+                <div class="sidenav-inner-div">Notification</div>
+                {% else %}
+                <span class="badge badge-danger" style="margin-left:-22px">{{unreadMsg}}</span>
+                <div class="sidenav-inner-div">Notification</div>
+                {% endif %}
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'wallet_agent' %}">
+                <img src="{% static 'wallet-white.svg' %}" class="logo" alt="Wallet-logo" />
+                <div class="sidenav-inner-div">Wallet</div>
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'dashboard_agent' %}">
+                <img src="{% static 'home_green.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Home</div>
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'profile_agent' %}">
+                <img src="{% static 'profile-white.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Profile</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'signout' %}">
+                <img src="{% static 'logout-white.svg' %}" class="logo" alt="Logout-logo" />
+                <div class="sidenav-inner-div">Logout</div>
+            </a>
+        </div>
+    </div>
+  </nav>
+  <div class="dashboard-inner" style="float:right">
+    
+    <div class="row dashboard-home-inner">
+        <div class="pull-left">
+            {% if error == "0" %}
+                <div class='text-center alert alert-info' id="message_div">{{message}}</div>
+            {% else %}
+                <div class='text-center text-danger' id="message_div">{{message}}</div>
+            {% endif %}
+            <div class="card dashboard-home-card" >
+                <div class="card-body dashboard-home-card-body">
+                  <div class="left">
+                    <h5 class="card-title" style="font-size:12px;font-weight: bold;">ALLOCATED WASTECOINS</h5>
+                    <div >
+                        <div ><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.5rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{allocatedWasteCoins.allocatedCoins}}</h2></div>
+                    </div>
+                    <p class="card-text" style="margin-top:20px;">{{allocatedWasteCoins.month}}</p>
+                  </div>
+                  <div class="right" style="float: right;">
+                    <img src="{% static 'allocation.svg' %}" class="logo" alt="allocation-logo" />
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="pull-right"> 
+            <div class="card dashboard-home-card" >
+                <div class="card-body dashboard-home-card-body">
+                  <div class="left">
+                    <h5 class="card-title" style="font-size:12px;font-weight: bold;">EXCHANGE RATE</h5>
+                    <h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important; font-size: 1.9rem;">&pound;{{allocatedWasteCoins.exchangeRate}}</h2>
+                    <p class="card-text">{{allocatedWasteCoins.month}}</p>
+                  </div>
+                  <div class="right" style="float: right;">
+                    <img src="{% static 'exchange-rate.svg' %}" class="logo" alt="allocation-logo" />
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row dashboard-home-inner">
+        <div class="pull-left">
+            <div class="card dashboard-home-card" >
+                <div class="card-body dashboard-home-card-body">
+                  <div class="left">
+                    <h5 class="card-title" style="font-size:12px; font-weight: bold;">Summary</h5>
+                    <div class="dashboard-home-card-body">
+                        <div class="left" >
+                            <p class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;">Mined</p>
+                            {% load mathfilters %}
+                            {% with answer=minedCoins.minedCoin__sum|div:allocatedWasteCoins.allocatedCoins %}
+                            <h5 class="card-text" style="color: #1070CA;">
+                                 {{ answer|mul:100|floatformat }} %</h5>
+                            {% endwith %}
+                        </div>
+                        <div class="right" >
+                            <p class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;">Unmined</p>
+                            {% load mathfilters %}
+                            {% with answeru=minedCoins.minedCoin__sum|div:allocatedWasteCoins.allocatedCoins %}
+                            <h5 class="card-text" style="color: #F7545E;">
+                                 {{ 1|sub:answeru|mul:100|floatformat }} %</h5>
+                            {% endwith %}
+                        </div>
+                    </div>
+                  </div>
+                  <div class="right" style="float: right;">
+                    <img src="{% static 'allocation.svg' %}" class="logo" alt="allocation-logo" />
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="pull-right"> 
+            <div class="card dashboard-home-card" >
+                <div class="card-body dashboard-home-card-body">
+                  <div class="left">
+                    <h5 class="card-title" style="font-size:12px;font-weight: bold;">TOTAL WASTE MINED</h5>
+                    <div style="width:130px;">
+                        <div ><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.5rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{minedCoins.minedCoin__sum|floatformat:"2"}}</h2></div>
+                        <!-- <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div>
+                        <div style="float: right;"><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important; font-size: 1.9rem;">{{minedCoins.minedCoin__sum}}</h2></div> -->
+                    </div>
+                    <!-- <h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;"><span><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></span>5342</h2> -->
+                    <p class="card-text">{{allocatedWasteCoins.month}}</p>
+                  </div>
+                  <div class="right" style="float: rigth;">
+                    <img src="{% static 'total-waste.svg' %}" class="logo" alt="allocation-logo" />
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- mobile -->
+    <div class="dashboard-home-inner-mobile">
+        <div class="reg-header text-center"></a>Dashboard</div>
+        <div class="col-12">
+            {% if error == "0" %}
+                <div class='text-center alert alert-info' style="font-size: 0.8rem;" id="message_div_mobile">{{message}}</div>
+            {% else %}
+                <div class='text-center text-danger' style="font-size: 0.8rem;" id="message_div_mobile">{{message}}</div>
+            {% endif %}
+            <div class="card" style="width:100%; background-color:#1773A6; border-radius: 5px 5px 0 0; margin-bottom: 20px;" >
+                <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                    <h3 class="card-text" style="color: #2AD2BE; font-size: 1.05rem;">{% for item in userman %}
+                        Hi! {{item.firstname}}
+                      {% endfor %}</h3>
+                    <p class="card-text" style="color: #fff; font-size:0.7rem;">Available WasteCoin for <br>{{allocatedWasteCoins.month}}</p>
+                    <div style=" float: left;">
+                        <!-- <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div> -->
+                        <div ><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.0rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{allocatedWasteCoins.allocatedCoins}}</h2></div>
+                    </div>
+                    <div style="width:120px; float: right; text-align: center; margin-top:-35px;">
+                        <h6 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important; font-size:0.7rem;">Exchange Rate</h6>
+                        <div style="width:50px; height:50px; background-color: #2AD2BE; border-radius: 50%; font-size: 0.8rem; padding-top:15px; font-weight:bold; margin:auto;">&pound;{{allocatedWasteCoins.exchangeRate}}</div>
+                    </div>
+                    <!-- <h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /><span>5342</span></h2> -->
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card " style="background-color: #38C8E84A;">
+                    <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                        <div style="width:130px;">
+                            <!-- <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div> -->
+                            <div ><h2 class="card-subtitle mb-2 text-muted" style="color: rgb(120, 122, 126)!important; font-size: 1.0rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{minedCoins.minedCoin__sum|floatformat:"2"}}</h2></div>
+                        </div>
+                        <!-- <h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;"><span><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></span>5342</h2> -->
+                        <p class="card-text" style="color: #000; font-weight: 500; font-size: 0.73rem; margin-top: 20px;">Mined <br>WasteCoins</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card" style="background-color: #2AD2BE4A;" >
+                    <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                        <div style="width:130px;">
+                            <!-- <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div> -->
+                            {% load mathfilters %}
+                            <div><h2 class="card-subtitle mb-2 text-muted" style="color: rgb(120, 122, 126)!important;font-size: 1.0rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{ allocatedWasteCoins.allocatedCoins|sub:minedCoins.minedCoin__sum |floatformat:"2"}}</h2></div>
+                        </div>
+                        <!-- <h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;"><span><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></span>5342</h2> -->
+                        <p class="card-text" style="color: #000; font-weight: 500; font-size: 0.73rem; margin-top: 20px;">Unmined <br>WasteCoins</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- LEADERS BAORD -->
+    <!-- <div class="card " style="margin-top:20px;">
+        <div class="card-body leadersboard-header">Leader Miners' Board</div>
+    </div>
+    {% if miner %} 
+        <table class="table table-striped" style="overflow-y: scroll;">
+            <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Miner ID</th>
+                <th scope="col">WasteCoin mined</th>
+            </tr>
+            </thead>
+            <tbody>
+    {% for t in miner %}
+            <tr>
+                <th scope="row">{{t.date_added_normal}}</th>
+                <td>{{t.user_phone}}</td>
+                <td><img src="{% static 'wastecoin-currency-smaller.svg' %}" class="logo" alt="allocation-logo" /> {{t.currentUserWastecoinBalance}}</td>
+            </tr>
+    {% endfor %}
+            </tbody>
+        </table> 
+    {% else %}
+        <div class='text-center text-primary' style="margin-top:50px;">There is no miner yet! You could be the first</div>
+    {% endif %} -->
+     <!-- PAGINATION -->
+    <!-- {% if miner.has_other_pages %}
+        <ul class="pagination" style="justify-content: center!important;">
+            {% if miner.has_previous %}
+            <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ miner.previous_page_number }}" style="color: #000;">&laquo;</a></li>
+            {% else %}
+            <li class="disabled" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in miner.paginator.page_range %}
+            {% if miner.number == i %}
+                <li class="active" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+                <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ i }}" style="color: #000;">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if miner.has_next %}
+            <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ miner.next_page_number }}" style="color: #000;">&raquo;</a></li>
+            {% else %}
+            <li class="disabled" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+    {% endif %} -->
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+

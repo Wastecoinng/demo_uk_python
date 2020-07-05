@@ -1,0 +1,196 @@
+{% extends "dashboard_layout.html" %}
+{% block body%}
+{% load static %}
+<div class="row">
+  <nav class="sidenav">
+    
+    <ul class="navbar-nav mr-auto sidenav-ul">
+        <li class="nav-item sidenav-li" >
+            <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'home.svg' %}" class="logo" alt="Home-logo" /><span class="sidenav-span">&nbsp;Home</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link" href="{% url 'profile' %}"><img src="{% static 'profile.svg' %}" class="logo" alt="Profile-logo" /> <span class="sidenav-span">Profile</span></a>
+        </li>
+        <li class="nav-item sidenav-li" >
+        <a class="nav-link " href="{% url 'wallet' %}"><img src="{% static 'wallet.svg' %}" class="logo" alt="Wallet-logo" /><span class="sidenav-span">&nbsp;Wallet</span></a>
+        </li>
+        <li class="nav-item sidenav-li" style="background-color: #2ad2be50;border-radius:5px; padding:1% 5%;">
+        <a class="nav-link" href="{% url 'notification' %}"><img src="{% static 'notification.svg' %}"class="logo" alt="Notification-logo" /> <span class="sidenav-span">Notification</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link " href="{% url 'signout' %}"><img src="{% static 'logout.svg' %}" class="logo" alt="Logout-logo" /><span class="sidenav-span">&nbsp;Logout</span></a>
+        </li>
+    </ul>
+    <div class="sidenav-ul-mobile">
+        <div class="menu-box">
+            <a href="{% url 'notification' %}">
+                <img src="{% static 'notification_green.svg' %}" class="logo" alt="Notification-logo" />
+                <div class="sidenav-inner-div">Notification</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'wallet' %}" >
+                <img src="{% static 'wallet-white.svg' %}" class="logo" alt="Wallet-logo" />
+                <div class="sidenav-inner-div">Wallet</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'home-white.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Home</div>
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'profile' %}">
+                <img src="{% static 'profile-white.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Profile</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'signout' %}">
+                <img src="{% static 'logout-white.svg' %}" class="logo" alt="Logout-logo" />
+                <div class="sidenav-inner-div">Logout</div>
+            </a>
+        </div>
+    </div>
+  </nav>
+  <div class="dashboard-inner" style="float:right">
+    <div class="row dashboard-home-inner">
+        {% if notification %} 
+        <div class="card" style="width:60%;background-color:rgba(56,200,232,.30);">
+            <div class="card-body">
+              <div style="display: flex; justify-content: space-between;">
+                <h6 style="font-weight: 400; width:25%;">Sender</h6>
+                <h6 style="font-weight: 400;width:50%;text-align: left;">Message</h6>
+                <h6 style="font-weight: 400;width:25%; text-align: right;">Date</h6>
+              </div>
+            </div>
+        </div>
+        <!-- accordion start here -->
+        
+        {% for item in notification %}
+        <div id="accordion" style="width:60%;">
+            <div class="card" style="width:100%;border-bottom:2px solid rgba(56,200,232,.30); border-radius: 0;">
+              <div class="card-header" id="heading{{item.id}}" style="padding:0; height:50px;">
+                <div class="card-body" data-toggle="collapse" data-target="#collapse{{item.id}}" aria-expanded="true" aria-controls="collapse{{item.id}}">
+                    <div style="display: flex; justify-content: space-between;">
+                        <h6 style="font-weight: 500;font-size: 0.8rem;width:25%">{{item.sender}}</h6>
+                        <h6 style="font-weight: 500;font-size: 0.8rem; width:50%;text-align: left;">{{item.header}}</h6>
+                        <h6 style="font-weight: 500; font-size: 0.8rem; text-align: right;width:25%">{{item.date_added_normal}}</h6>
+                    </div>
+                  </div>
+              </div>
+          
+              <div id="collapse{{item.id}}" class="collapse" aria-labelledby="heading{{item.id}}" data-parent="#accordion">
+                <div class="card-body">
+                    {{item.message}}
+                </div>
+              </div>
+            </div>
+
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class='text-center alert alert-info' style="margin-top:50px;">You dont have any Notification for now. Thanks!</div>
+        {% endif %}
+        <!-- accordion ends here -->
+        
+    </div>
+    <!-- PAGINATION -->
+{% if notification.has_other_pages %}
+    <ul class="pagination" style="justify-content: center!important; margin-top:20px;">
+        {% if notification.has_previous %}
+        <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ notification.previous_page_number }}" style="color: #000;">&laquo;</a></li>
+        {% else %}
+        <li class="disabled" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>&laquo;</span></li>
+        {% endif %}
+        {% for i in notification.paginator.page_range %}
+        {% if notification.number == i %}
+            <li class="active" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+            <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ i }}" style="color: #000;">{{ i }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if notification.has_next %}
+        <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ notification.next_page_number }}" style="color: #000;">&raquo;</a></li>
+        {% else %}
+        <li class="disabled" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>&raquo;</span></li>
+        {% endif %}
+    </ul>
+{% endif %}
+    
+    <!-- mobile -->
+    <div class="dashboard-home-inner-mobile">
+        <div class="reg-header text-center"></a>Notification</div>
+        <div class="col-12">
+            <!-- accordion start here -->
+    {% if notification %}         
+        {% for item in notification %}
+        <div id="accordion"  >
+            <div class="card" style="width:100%; border-bottom:2px solid rgba(56,200,232,.30); border-radius: 0 0 10px 10px;">
+              <div class="card-header" id="heading{{item.id}}" style="padding:0.7rem; border:0; background-color: transparent; ">
+                <div class="card-body" data-toggle="collapse" data-target="#collapse{{item.id}}" aria-expanded="true" aria-controls="collapse{{item.id}}" style="padding:0;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="text-align: left;">
+                            <h6 style="font-weight: 500; font-size:0.8rem;">{{item.header}}</h6>
+                            <h6 style="font-weight: 400;font-size:0.65rem;">{{item.date_added_normal}}</h6>
+                        </div>
+                        <div style="text-align: right;"><h6 style="font-weight: 400;margin-top:25px; font-size:0.65rem;">{{item.sender}}</h6></div>
+                      </div>
+                  </div>
+              </div>
+          
+              <div id="collapse{{item.id}}" class="collapse" aria-labelledby="heading{{item.id}}" data-parent="#accordion">
+                <div class="card-body" style="padding:0.5rem; font-size:0.75rem; background-color:azure;">
+                    {{item.message}}
+                </div>
+              </div>
+            </div>
+
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class='text-center alert alert-info' style="margin-top:50px; font-size: 0.65rem;">You dont have any Notification for now. Thanks!</div>
+        {% endif %}
+        <!-- accordion ends here -->
+        <!-- PAGINATION -->
+        {% if notification.has_other_pages %}
+            <ul class="pagination" style="justify-content: center!important; margin-top:20px;">
+                {% if notification.has_previous %}
+                <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ notification.previous_page_number }}" style="color: #000;">&laquo;</a></li>
+                {% else %}
+                <li class="disabled" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in notification.paginator.page_range %}
+                {% if notification.number == i %}
+                    <li class="active" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                    <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ i }}" style="color: #000;">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if notification.has_next %}
+                <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ notification.next_page_number }}" style="color: #000;">&raquo;</a></li>
+                {% else %}
+                <li class="disabled" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+    
+        </div>
+    </div>
+
+   
+        
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+

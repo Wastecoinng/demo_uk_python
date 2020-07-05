@@ -1,0 +1,323 @@
+{% extends "dashboard_layout.html" %}
+{% block body%}
+{% load static %}
+<div class="row">
+  <nav class="sidenav">
+    
+    <ul class="navbar-nav mr-auto sidenav-ul">
+        <li class="nav-item sidenav-li" >
+            <a class="nav-link" href="{% url 'dashboard_agent' %}"><img src="{% static 'home.svg' %}" class="logo" alt="Home-logo" /><span class="sidenav-span">&nbsp;Home</span></a>
+        </li>
+        <li class="nav-item sidenav-li" style="background-color: #2ad2be50;border-radius:5px; padding:1% 5%;">
+        <a class="nav-link" href="{% url 'profile_agent' %}"><img src="{% static 'profile.svg' %}" class="logo" alt="Profile-logo" /> <span class="sidenav-span">Profile</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link " href="{% url 'wallet_agent' %}"><img src="{% static 'wallet.svg' %}" class="logo" alt="Wallet-logo" /><span class="sidenav-span">&nbsp;Wallet</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link" href="{% url 'notification' %}"><img src="{% static 'notification.svg' %}"class="logo" alt="Notification-logo" /> 
+            {% if unreadMsg == 0 %}
+            <span class="sidenav-span">Notification</span>
+            {% else %}
+            <span class="sidenav-span">Notification</span><span class="badge badge-info">{{unreadMsg}}</span>
+            {% endif %}
+        </a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link " href="{% url 'signout' %}"><img src="{% static 'logout.svg' %}" class="logo" alt="Logout-logo" /><span class="sidenav-span">&nbsp;Logout</span></a>
+        </li>
+    </ul>
+    <div class="sidenav-ul-mobile">
+        <div class="menu-box">
+            <a href="{% url 'notification' %}">
+                <img src="{% static 'notification-white.svg' %}" class="logo" alt="Notification-logo" />
+                {% if unreadMsg == 0 %}
+                <div class="sidenav-inner-div">Notification</div>
+                {% else %}
+                <span class="badge badge-danger" style="margin-left:-22px">{{unreadMsg}}</span>
+                <div class="sidenav-inner-div">Notification</div>
+                {% endif %}
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'wallet_agent' %}">
+                <img src="{% static 'wallet-white.svg' %}" class="logo" alt="Wallet-logo" />
+                <div class="sidenav-inner-div">Wallet</div>
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'dashboard_agent' %}">
+                <img src="{% static 'home-white.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Home</div>
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'profile_agent' %}">
+                <img src="{% static 'profile_green.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Profile</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'signout' %}">
+                <img src="{% static 'logout-white.svg' %}" class="logo" alt="Logout-logo" />
+                <div class="sidenav-inner-div">Logout</div>
+            </a>
+        </div>
+    </div>
+  </nav>
+  <div class="dashboard-inner" style="float:right">
+    <div class="row dashboard-home-inner">
+        {% if error == "0" %}
+            <div class='text-center alert alert-info' id="message_div">{{message}}</div>
+        {% else %}
+            <div class='text-center text-danger' id="message_div">{{message}}</div>
+        {% endif %}
+        <div class="col-12">
+            <div class="card reg-form" >
+                <div style="padding-left:15px; padding-right:15px;">
+                    <h5 style="float:left; color:#3A3B3F;">Bio Data</h5>
+                    <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#agentBioDataModal"/>
+                </div>
+                <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                    {% for item in userman %}
+                    <form class="" >
+                      <div class="row">
+                          <div class="col-md-6">
+                             <div class="form-group text-left">
+                                <input type="text" 
+                                    class="form-control-profile" 
+                                    name="firstname" 
+                                    value="{{item.firstname}}"
+                                />
+                              </div>
+                    
+                              <div class="form-group text-left">
+                                <input type="email" 
+                                    class="form-control-profile" 
+                                    name="email" 
+                                    value="{{item.email}}"
+                                />
+                              </div>
+                    
+                              <div class="form-group text-left">
+                                <input type="text" 
+                                    class="form-control-profile" 
+                                    name="address" 
+                                    value="{{item.user_address}}"
+                                />
+                              </div>
+                          </div>
+                    
+                          <div class="col-md-6 next-mobile">
+                              <div class="form-group text-left">
+                                <input type="text" 
+                                    class="form-control-profile" 
+                                    name="lastname" 
+                                    value="{{item.lastname}}"
+                                />
+                              </div>
+                    
+                              <div class="form-group text-left">
+                                <input type="phone" 
+                                    class="form-control-profile" 
+                                    name="phonenumber" 
+                                    value="{{item.user_phone}}"
+                                />
+                              </div>
+
+                              <div class="form-group text-left">
+                                <input type="text" 
+                                    class="form-control-profile" 
+                                    name="state" 
+                                    value="{{item.user_state}}"
+                                />
+                              </div>
+                          </div>
+                          
+                        </div>
+
+                      </form>
+                      {% endfor %}
+                </div>
+            </div>
+        </div>
+        <!-- account details update -->
+        <div style="width:59%; margin-top:2%;">
+            <div style="float: left; width:49%;">
+                <div class="card reg-form-small" >
+                    <div style="padding-left:15px; padding-right:15px;">
+                        <h5 style="float:left; color:#3A3B3F;">Account Details</h5>
+                        <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#agentAccountModal"/>
+                    </div>
+                    <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                        <form class="" >
+                        {% for item in userman %}
+                          <div class="row">
+                              <div class="col-md-12">
+                                 <div class="form-group text-left">
+                                    <input type="text" 
+                                        class="form-control-profile" 
+                                        name="accountname" 
+                                        value="{{item.accountname}}"
+                                    />
+                                  </div>
+                        
+                                  <div class="form-group text-left">
+                                    <input type="text" 
+                                        class="form-control-profile" 
+                                        name="accountnumber" 
+                                        value="{{item.accountnumber}}"
+                                    />
+                                  </div>
+                        
+                                  <div class="form-group text-left">
+                                    <input type="text" 
+                                        class="form-control-profile" 
+                                        name="bank" 
+                                        value="{{item.bank}}"
+                                    />
+                                  </div>
+                              </div>
+                          </div>
+                          
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div style="float:right;width:49%;">
+                <div class="card reg-form-small" >
+                    <div style="padding-left:15px; padding-right:15px;">
+                        <h5 style="float:left; color:#3A3B3F;">Security</h5>
+                        <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#agentPasswordModal"/>
+                    </div>
+                    <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                        <form class="" >
+                    
+                          <div class="row">
+                              <div class="col-md-12">
+                                 <div class="form-group text-left">
+                                    <input type="password" 
+                                        class="form-control-profile" 
+                                        name="oldpassword" 
+                                        placeholder="******"
+                                    />
+                                  </div>
+                        
+                                  <div class="form-group text-left">
+                                    <input type="password" 
+                                        class="form-control-profile" 
+                                        name="newpassword" 
+                                        placeholder="******"
+                                    />
+                                  </div>
+                        
+                                  <div class="form-group text-left">
+                                    <input type="password" 
+                                        class="form-control-profile" 
+                                        name="newpassword2" 
+                                        placeholder="******"
+                                    />
+                                  </div>
+                              </div>
+                          </div>
+               
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- accunt deyails end -->
+    </div>
+    
+    <!-- mobile -->
+    <div class="dashboard-home-inner-mobile">
+        <div class="reg-header text-center"> Profile</div>
+        <!-- Biodata -->
+        <div class="col-12">
+            {% if error == "0" %}
+                <div class='text-center alert alert-info' style="font-size: 0.8rem;" id="message_div_mobile">{{message}}</div>
+            {% else %}
+                <div class='text-center text-danger' style="font-size: 0.8rem;" id="message_div_mobile">{{message}}</div>
+            {% endif %}
+            <div class="card" style="width:100%;" >
+                <div class="card-body " style="padding: 1.5rem 1rem!important; border:2px solid #f3eeee; box-sizing: border-box; ">
+                    <form class="form-control reg-form-modal" action="{% url 'update_biodata' %}" method="POST">
+                        <div style=" margin-bottom:40px;">
+                            <h5 style="float:left; color:#3A3B3F;">Bio Data</h5>
+                            <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#agentBioDataModal"/>
+                        </div>
+                        {% for item in userman %}
+                        <div class="row" style="border-top:1px solid #ccc;">
+                            <div style="float: left; padding-right:30px;width:100px; font-size:0.6rem;">Full Name</div>
+                            <div style="float: right; font-weight: 600;font-size:0.7rem;">{{item.firstname}}  {{item.lastname}}</div>
+                        </div>
+                        <div class="row">
+                            <div style="float: left;padding-right:30px;width:100px; font-size:0.6rem;">Email Address</div>
+                            <div style="float: right; font-weight: 600;font-size:0.7rem;">{{item.email}}</div>
+                        </div>
+                        <div class="row">
+                            <div style="float: left;width:100px;padding-right: 30px; font-size:0.5rem;">Phone Number</div>
+                            <div style="float: right; font-weight: 600;font-size:0.7rem;">{{item.user_phone}}</div>
+                        </div>
+                        <div class="row">
+                            <div style="float: left;padding-right:30px; width:100px;font-size:0.6rem;">Address</div>
+                            <div style="float: right; font-weight: 600; font-size:0.55rem;">{{item.user_address}}, <br>{{item.user_state}}, {{item.user_country}}</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- account details -->
+        <div class="col-12">
+            <div class="card" style="width:100%;" >
+                <div class="card-body " style="padding: 1.5rem 1rem!important; border:2px solid #f3eeee; box-sizing: border-box; ">
+                    <div style=" margin-bottom:40px;">
+                        <h5 style="float:left; color:#3A3B3F;">Account Details</h5>
+                        <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#agentAccountModal"/>
+                    </div>
+                    <div class="row" style="border-top:1px solid #ccc;">
+                        <div style="float: left; padding-right:30px;width:100px; font-size:0.6rem;">Account Name</div>
+                        <div style="float: right; font-weight: 600;font-size:0.5rem;">{{item.accountname}}</div>
+                    </div>
+                    <div class="row">
+                        <div style="float: left;padding-right:30px;width:100px; font-size:0.6rem;">Account Number</div>
+                        <div style="float: right; font-weight: 600;font-size:0.5rem;">{{item.accountnumber}}</div>
+                    </div>
+                    <div class="row">
+                        <div style="float: left;width:100px;padding-right: 30px; font-size:0.6rem;">Bank Name</div>
+                        <div style="float: right; font-weight: 600;font-size:0.6rem;">{{item.bank}}</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <!-- security -->
+        <div class="col-12">
+            <div class="card" style="width:100%;" >
+                <div class="card-body " style="padding: 1.5rem 1rem!important; border:2px solid #f3eeee; box-sizing: border-box; ">
+                    <div style=" margin-bottom:40px;">
+                        <h5 style="float:left; color:#3A3B3F;">Security</h5>
+                        <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#agentPasswordModal"/>
+                    </div>
+                    <div class="row" style="border-top:1px solid #ccc;">
+                        <div style="float: left; padding-right:30px;width:100px; font-size:0.6rem;">Old Password</div>
+                        <div style="float: right; font-weight: 600;font-size:0.8rem;">******</div>
+                    </div>
+                    <div class="row">
+                        <div style="float: left;padding-right:30px;width:100px; font-size:0.6rem;">New Password</div>
+                        <div style="float: right; font-weight: 600;font-size:0.8rem;">******</div>
+                    </div>
+                    <!-- <div class="row">
+                        <div style="float: left;width:150px;padding-right: 30px; font-size:0.6rem;">Re-enter New Password</div>
+                        <div style="float: right; font-weight: 600;font-size:0.8rem;">******</div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

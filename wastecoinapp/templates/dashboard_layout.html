@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Wastecoin app where you get rewarded for propal waste disposal"
+    />
+    {% load static %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="{% static 'js/modal.js' %}"></script>
+    <!-- Font Awesome -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>
+
+    <!-- Tempus Dominus Bootstrap 4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha256-XPTBwC3SBoWHSmKasAk01c08M6sIA5gF5+sRxqak2Qs=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
+
+    <!-- bootstrap -->
+    <link rel="shortcut icon" type="image/png" href="{% static 'waste_coin.ico' %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script> 
+    <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates&display=swap" rel="stylesheet">   
+    <link href="https://fonts.googleapis.com/css?family=Orbitron:900&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Kulim+Park|Satisfy&display=swap" rel="stylesheet"> 
+    <title>WasteCoin</title>
+    <style>
+       body{
+        font-family: 'montserrat', sans-serif!important;
+        overflow: hidden;
+      }
+      .active{
+        background-color: #38C8E8;
+      }
+       .appheader{
+          background-color: rgba(56,200,232,.30);
+          height: 80px;
+          padding: 20px 50px;
+       }
+       .form-inline {
+       justify-content: space-around!important; 
+       /* width:50%; */
+        }
+       .leadersboard-header{
+            background-color:#38C8E860; text-align:center; font-size:2rem;padding: 0.5rem;
+        }
+       .userfooter {
+          text-align: center;
+          background-color: transparent;
+          position: fixed;
+          bottom:0;
+          width:100%;
+          color: #82899B;
+          justify-content: center;
+          z-index: 200;
+        }
+        .form-control-profile {
+        display: block;
+        width: 100%;
+        height: 45.5px;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #7B7F9EB5;
+        background-color: transparent;
+        border-radius:5px;
+        background-clip: padding-box;
+        border: 1px solid #00000032;
+      
+      }
+      .form-control-mobile {
+        display: block;
+        width: 100%;
+        height: 45.5px;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #7B7F9EB5;
+        background-color: #fff;
+        border-radius:5px;
+        background-clip: padding-box;
+        border-top: 1px solid #e8e8e8;
+        border-left: 1px solid #e8e8e8;
+        border-right: 1px solid #e8e8e8;
+      
+      }
+      .reg-submit{
+        height:42px;
+        width:50%;
+        border-radius: 10px;
+        margin:0 auto;
+        background-color: #38C8E8;
+        border: 1px solid transparent;
+        color:#fff;
+      }
+      .reg-form{
+        width:60%;
+        margin-left:20%;
+        padding:1.5%;
+      }
+      .reg-form-modal{
+        width:100%;
+        height:60vh;
+        padding:1.5%;
+        border:0;
+        background-color: transparent;
+      }
+      .reg-form-small{
+        /* width:60%;
+        margin-left:20%; */
+        padding:1.5%;
+      }
+        .dashboard-body{
+          width:100%;
+          height:100vh;
+          overflow: hidden;
+          background-color: #fff;
+          position: fixed;
+          z-index: 100;
+          top: 0;
+          left: 0;
+
+        }
+        .sidenav-ul-mobile{
+      display: none;
+    }
+.dashboard-inner{
+    width:100%;
+    margin-left: 270px;
+    background-color: #E5E5E520;
+    height:calc(100% - 80px);
+    padding:2%;
+}
+.dashboard-home-inner{
+  justify-content: space-around;
+  margin-bottom:2%;
+}
+.dashboard-home-inner-mobile{
+      display: none;
+    }
+.dashboard-home-card{
+  width: 500px;
+  border-radius: 5px;
+}
+.left{
+  float: left;
+  width:270px;
+}
+.dashboard-home-card-body{
+  display: flex;
+  justify-content: space-evenly;
+  color:#66788A;
+}
+.reg-header {
+    background-color: #2AD2BE;
+    height: 42px;
+    border-radius: 0px;
+    padding-top: 10px;
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 5%;
+    padding-left: 20px;
+}
+.right{
+  float: right;
+}
+ @media screen and (max-width: 810px) {
+    .dashboard-inner{
+        width:100%;
+        margin-left: 270px;
+        background-color: #E5E5E505;
+        height:calc(100% - 80px);
+        
+    }
+    .card {border:0;}
+    .table th, .table td {
+    padding: .3rem!important;
+    }
+    .dashboard-home-inner{
+      display: none;
+    }
+    .dashboard-home-inner-mobile{
+      display: block;
+    }
+    .leadersboard-header{
+    background-color:#38C8E860; text-align:center; font-size:0.8rem;
+  }
+  }
+
+/* MOBILE RESPONSIVENES */
+@media screen and (max-width: 760px) {
+
+    .dashboard-header{
+      display: block;
+      background-color: #2AD2BE;
+      height:42px;
+      border-radius: 0px;
+      padding-top:10px;
+      color:#fff;
+      font-size:1rem;
+      margin-bottom: 5%;
+    }
+    .row {
+    margin-right: 0!important;
+    margin-left: 0!important;
+  }
+  .reg-form-modal {
+    width: 100%;
+    height: 20vh;
+    /* padding: 1.5%;
+    border: 0;
+    background-color: transparent; */
+  }
+  .modal-content {
+    min-height: 80vh!important;
+  }
+    /* DASHBOARD  */
+    .appheader{
+      display: none;
+    }
+    .userfooter{
+      display: none;
+    }
+    .col-12{
+      padding-left:0!important;
+      padding-right: 0!important;
+    }
+  
+    /* MOBILE MENU */
+    
+    .dashboard-inner{
+      width:100%;
+      background-color: #E5E5E505;
+      height:calc(100vh - 160px);
+      margin-left: 0px;
+      padding:5%;
+    }
+    
+    .dashboard-body{
+      padding:2%;
+    }
+  
+   
+  }
+        .sidenav {
+    height: calc(100% - 80px);
+    width: 270px;
+    position: fixed;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    overflow-x: hidden;
+    padding-top: 20px;
+    border-right: 2px solid #3F3F4412;
+    padding:1%;
+  }
+  .sidenav-li{
+    margin: 7px;
+    padding: 0 5%;
+  }
+  .sidenav-li > a{
+    text-decoration: none;
+    color:#000;
+  }
+  .sidenav-li:hover{
+    background-color: #38C8E850;
+    /* border-radius: 5px; */
+    /* padding: 0 7%; */
+  }
+  .sidenav-li > a:hover{
+    text-decoration: none;
+    color:#000;
+  }
+  .sidenav-span{
+    padding-left: 30px;
+  }
+
+  @media screen and (max-width: 760px){
+    .sidenav {
+        height: 80px;
+        width: 96%;
+        position: fixed;
+        z-index: 1000;
+        bottom: 0;
+        background-color: #1773a6;
+        overflow-x: hidden;
+        padding: 2%;
+        border-radius: 0 0 20px 20px;
+        margin-left: 1%;
+        margin-bottom: 1%;
+    }
+    .sidenav-ul{
+      display: none;
+    }
+    .sidenav-ul-mobile{
+      display: flex;
+      justify-content: space-evenly;
+      margin-top:3%;
+    }
+    .menu-box > a{
+      color: #fff;
+      font-size: 0.7rem;
+      text-decoration: none;
+    }
+    .menu-box > a:hover{
+      text-decoration: none;
+    }
+    .menu-box{
+      text-align: center;
+      padding:1%;
+    }
+    /* .menu-box:hover{
+      background-color: #2ad2be50;
+      border-radius:9px;
+      padding:5%;
+    } */
+    thead{
+      font-size:50%;
+    }
+    tbody{
+      font-size:60%;
+    }
+    .form-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly!important;
+    flex-flow: nowrap;
+    width:100%;
+    }
+    .date-form{
+      padding: 0.15rem!important;
+      font-size: 0.6rem!important;
+    }
+}
+    </style>
+
+</head>
+<body>
+  <div>
+    <nav class="navbar navbar-expand-lg appheader">
+    <a class="navbar-brand"><img src="{% static 'waste_coin_logo.svg' %}" class="logo" alt="logo" /></a> 
+     
+    <h4 class="card-text pull-right" style="color: #1773A6; float: right; margin-left:70%">
+    {% for item in userman %}
+      Hi! {{item.firstname}}
+    {% endfor %}
+    </h4>
+    </nav>
+    <!-- <div class="dashboard-header text-center">Dashboard</div> -->
+</div>
+
+    {% block body%}
+    {% endblock %}
+    <div class="row d-none d-sm-flex userfooter">
+      <p>copyright @ WasteCoin 2020</p>
+  </div>
+      <!-- Biodata Modal -->
+    <div class="modal fade" id="bioDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #e6f7faf0 !important">
+          <div class="modal-header">
+            <h5>Update Bio Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form class="form-control reg-form-modal" action="{% url 'update_biodata' %}" method="POST">
+            <div class="modal-body"> 
+                {% csrf_token %}
+                  <div class="row">
+                      <div class="col-md-12">
+                        {% for item in userman %}
+                        <label>First Name</label>
+                        <div class="form-group text-left">
+                            <input type="text" 
+                                class="form-control-mobile" 
+                                name="firstname" 
+                                value="{{item.firstname}}"
+                            />
+                          </div>
+                          <label>Last Name</label>
+                        <div class="form-group text-left">
+                            <input type="text" 
+                                class="form-control-mobile" 
+                                name="lastname" 
+                                value="{{item.lastname}}"
+                            />
+                          </div>
+                          
+                          <label>Phone Number</label>
+                          <div class="form-group text-left">
+                            <input type="phone" 
+                                readonly ="readonly"
+                                class="form-control-mobile" 
+                                name="phonenumber"
+                                value="{{item.user_phone}}"
+                            /> 
+                          </div>
+                          <label>Address</label>
+                          <div class="form-group text-left">
+                            <input type="text" 
+                                class="form-control-mobile" 
+                                name="address" 
+                                value="{{item.user_address}}"
+                            />
+                          </div>
+                          <label>State of Residence</label>
+                          <div class="form-group text-left">
+                            <select id="state" name= "state" class="form-control-mobile" >
+                              <option  selected value="{{item.user_state}}">{{item.user_state}}</option>
+                              <option  selected value="Glasgow">Glasgow</option>
+                              <option value="Other">Other</option>
+                          </select>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+              
+                
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="reg-submit" >Update</button>
+            </div>
+         </form>
+        </div>
+      </div>
+    </div> 
+
+    <!-- Biodata Agent Modal -->
+    <div class="modal fade" id="agentBioDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #e6f7faf0 !important">
+          <div class="modal-header">
+            <h5>Update Bio Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form class="form-control reg-form-modal" action="{% url 'update_agent_biodata' %}" method="POST">
+            <div class="modal-body"> 
+                {% csrf_token %}
+                  <div class="row">
+                      <div class="col-md-12">
+                        {% for item in userman %}
+                        <label>First Name</label>
+                        <div class="form-group text-left">
+                            <input type="text" 
+                                class="form-control-mobile" 
+                                name="firstname" 
+                                value="{{item.firstname}}"
+                            />
+                          </div>
+                          <label>Last Name</label>
+                        <div class="form-group text-left">
+                            <input type="text" 
+                                class="form-control-mobile" 
+                                name="lastname" 
+                                value="{{item.lastname}}"
+                            />
+                          </div>
+                          
+                          <label>Agent ID</label>
+                          <div class="form-group text-left">
+                            <input type="phone" 
+                                readonly ="readonly"
+                                class="form-control-mobile" 
+                                name="agentid"
+                                value="{{item.user}}"
+                            /> 
+                          </div>
+                          <label>Address</label>
+                          <div class="form-group text-left">
+                            <input type="text" 
+                                class="form-control-mobile" 
+                                name="address" 
+                                value="{{item.user_address}}"
+                            />
+                          </div>
+                          <label>State of Residence</label>
+                          <div class="form-group text-left">
+                            <select id="state" name= "state" class="form-control-mobile" >
+                              <option  selected value="{{item.user_state}}">{{item.user_state}}</option>
+                              <option  selected value="Glasgow">Glasgow</option>
+                              <option value="Other">Other</option>
+                          </select>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+              
+                
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="reg-submit" >Update</button>
+            </div>
+         </form>
+        </div>
+      </div>
+    </div> 
+    <!-- Password Modal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #e6f7faf0 !important">
+          <div class="modal-header">
+            <h5>Update Password</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form class="form-control reg-form-modal" >
+              <div class="modal-body">
+                  {% csrf_token %}
+                    <!-- <div class="row">
+                        <div class="col-md-12">   
+                          {% for item in userman %}                     
+                          <label>Old Password</label>
+                          <div class="form-group text-left">
+                              <input type="password" 
+                                  class="form-control-mobile" 
+                                  name="oldpassword" 
+                              />
+                            </div>
+                            <label>New Password</label>
+                          <div class="form-group text-left">
+                              <input type="password" 
+                                  class="form-control-mobile" 
+                                  name="newpassword" 
+                              />
+                            </div>
+                            <label>Re-enter New Password</label>
+                            <div class="form-group text-left">
+                              <input type="password" 
+                                  class="form-control-mobile" 
+                                  name="newpassword2" 
+                              />
+                            </div>
+                            <div class="form-group text-left" style="display: none;">
+                              <input type="phone" 
+                                  readonly ="readonly"
+                                  class="form-control-mobile" 
+                                  name="phonenumber"
+                                  value="{{item.user_phone}}"
+                              /> 
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>  -->
+                    Please Contact the Wastecoin technical team to change your password. Thanks
+              </div>
+              <!-- <div class="modal-footer">
+                <button type="submit" class="reg-submit" >Update</button>
+              </div> -->
+            </div>
+        </form>
+      </div>
+    </div> 
+    <!-- Password Agent Modal -->
+    <div class="modal fade" id="agentPasswordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #e6f7faf0 !important">
+          <div class="modal-header">
+            <h5>Update Password</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form class="form-control reg-form-modal" >
+              <div class="modal-body">
+                  {% csrf_token %}
+                    <!-- <div class="row">
+                        <div class="col-md-12">   
+                          {% for item in userman %}                     
+                          <label>Old Password</label>
+                          <div class="form-group text-left">
+                              <input type="password" 
+                                  class="form-control-mobile" 
+                                  name="oldpassword" 
+                              />
+                            </div>
+                            <label>New Password</label>
+                          <div class="form-group text-left">
+                              <input type="password" 
+                                  class="form-control-mobile" 
+                                  name="newpassword" 
+                              />
+                            </div>
+                            <label>Re-enter New Password</label>
+                            <div class="form-group text-left">
+                              <input type="password" 
+                                  class="form-control-mobile" 
+                                  name="newpassword2" 
+                              />
+                            </div>
+                            <div class="form-group text-left" style="display: none;">
+                              <input type="phone" 
+                                  readonly ="readonly"
+                                  class="form-control-mobile" 
+                                  name="phonenumber"
+                                  value="{{item.user_phone}}"
+                              /> 
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>  -->
+                    Please Contact the Wastecoin technical team to change your password. Thanks
+              </div>
+              <!-- <div class="modal-footer">
+                <button type="submit" class="reg-submit" >Update</button>
+              </div> -->
+            </div>
+        </form>
+      </div>
+    </div> 
+    <!-- Account Modal -->
+    <div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #e6f7faf0 !important">
+          <div class="modal-header">
+            <h5>Update Account</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <form class="form-control reg-form-modal" action="{% url 'update_account' %}" method="POST">
+              <div class="modal-body">
+                  {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12">
+                          {% for item in userman %}
+                          <label>Account Name</label>
+                          <div class="form-group text-left">
+                              <input type="text" 
+                                  class="form-control-mobile" 
+                                  name="accountname" 
+                                  value="{{item.accountname}}"
+                              />
+                            </div>
+                            <label>Account Number</label>
+                          <div class="form-group text-left">
+                              <input type="text" 
+                                  class="form-control-mobile" 
+                                  name="accountnumber" 
+                                  value="{{item.accountnumber}}"
+                              />
+                            </div>
+                            <label>Bank</label>
+                            <div class="form-group text-left">
+                              <select id="bank" name= "bank" class="form-control-mobile" >
+                                <option value="{{item.bank}}" selected>{{item.bank}}</option>
+                                <option value="Access Bank">Access Bank</option>
+                                <option value="Citibank">Citibank</option>
+                                <option value="Diamond Bank">Diamond Bank</option>
+                                <option value="Ecobank">Ecobank</option>
+                                <option value="Fidelity Bank">Fidelity Bank</option>
+                                <option value="FCMB">First City Monument Bank (FCMB)</option>
+                                <option value="FSDH">FSDH Merchant Bank</option>
+                                <option value="GTB">Guarantee Trust Bank (GTB)</option>
+                                <option value="Heritage Bank">Heritage Bank</option>
+                                <option value="Keystone Bank">Keystone Bank</option>
+                                <option value="Rand Bank">Rand Merchant Bank</option>
+                                <option value="Polaris Bank">Polaris Bank</option>
+                                <option value="Stanbic Bank">Stanbic IBTC Bank</option>
+                                <option value="Standard Chartered Bank">Standard Chartered Bank</option>
+                                <option value="Sterling Bank">Sterling Bank</option>
+                                <option value="Suntrust Bank">Suntrust Bank</option>
+                                <option value="Union Bank">Union Bank</option>
+                                <option value="UBA">United Bank for Africa (UBA)</option>
+                                <option value="Unity Bank">Unity Bank</option>
+                                <option value="Wema Bank">Wema Bank</option>
+                                <option value="Zenith Bank">Zenith Bank</option>
+                              </select>
+                              <!-- <input type="text" 
+                                  class="form-control-mobile" 
+                                  name="bank" 
+                                  value="{{item.bank}}"
+                              /> -->
+                            </div>
+                            <div class="form-group text-left" style="display: none;">
+                              <input type="phone" 
+                                  readonly ="readonly"
+                                  class="form-control-mobile" 
+                                  name="phonenumber"
+                                  value="{{item.user_phone}}"
+                              /> 
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="reg-submit" >Update</button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div> 
+    <!-- Account Agent Modal -->
+    <div class="modal fade" id="agentAccountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #e6f7faf0 !important">
+          <div class="modal-header">
+            <h5>Update Account</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <form class="form-control reg-form-modal" action="{% url 'update_agent_account' %}" method="POST">
+              <div class="modal-body">
+                  {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12">
+                          {% for item in userman %}
+                          <label>Account Name</label>
+                          <div class="form-group text-left">
+                              <input type="text" 
+                                  class="form-control-mobile" 
+                                  name="accountname" 
+                                  value="{{item.accountname}}"
+                              />
+                            </div>
+                            <label>Account Number</label>
+                          <div class="form-group text-left">
+                              <input type="text" 
+                                  class="form-control-mobile" 
+                                  name="accountnumber" 
+                                  value="{{item.accountnumber}}"
+                              />
+                            </div>
+                            <label>Bank</label>
+                            <div class="form-group text-left">
+                              <select id="bank" name= "bank" class="form-control-mobile" >
+                                <option value="{{item.bank}}" selected>{{item.bank}}</option>
+                                <option value="Access Bank">Access Bank</option>
+                                <option value="Citibank">Citibank</option>
+                                <option value="Diamond Bank">Diamond Bank</option>
+                                <option value="Ecobank">Ecobank</option>
+                                <option value="Fidelity Bank">Fidelity Bank</option>
+                                <option value="FCMB">First City Monument Bank (FCMB)</option>
+                                <option value="FSDH">FSDH Merchant Bank</option>
+                                <option value="GTB">Guarantee Trust Bank (GTB)</option>
+                                <option value="Heritage Bank">Heritage Bank</option>
+                                <option value="Keystone Bank">Keystone Bank</option>
+                                <option value="Rand Bank">Rand Merchant Bank</option>
+                                <option value="Polaris Bank">Polaris Bank</option>
+                                <option value="Stanbic Bank">Stanbic IBTC Bank</option>
+                                <option value="Standard Chartered Bank">Standard Chartered Bank</option>
+                                <option value="Sterling Bank">Sterling Bank</option>
+                                <option value="Suntrust Bank">Suntrust Bank</option>
+                                <option value="Union Bank">Union Bank</option>
+                                <option value="UBA">United Bank for Africa (UBA)</option>
+                                <option value="Unity Bank">Unity Bank</option>
+                                <option value="Wema Bank">Wema Bank</option>
+                                <option value="Zenith Bank">Zenith Bank</option>
+                              </select>
+                              <!-- <input type="text" 
+                                  class="form-control-mobile" 
+                                  name="bank" 
+                                  value="{{item.bank}}"
+                              /> -->
+                            </div>
+                            <div class="form-group text-left" style="display: none;" >
+                              <input type="phone" 
+                                  readonly ="readonly"
+                                  class="form-control-mobile" 
+                                  name="agentid"
+                                  value="{{item.user}}"
+                              /> 
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="reg-submit" >Update</button>
+              </div>
+            </form>
+        </div>
+      </div>
+    </div> 
+     <!-- Send Coin (Agent) Modal -->
+     <div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #e6f7faf0 !important">
+          <div class="modal-header">
+            <h5>Send Coins</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form class="form-control reg-form-modal" action="{% url 'send_coins' %}" method="POST">
+            <div class="modal-body"> 
+                {% csrf_token %}
+                  <div class="row">
+                      <div class="col-md-12">
+                        {% for item in userman %}
+                        <label>Weight (Kg)</label>
+                        <div class="form-group text-left">
+                            <input type="text" 
+                                class="form-control-mobile" 
+                                name="weight" 
+                                value=""
+                            />
+                          </div>
+                          <label>Recipient</label>
+                        <div class="form-group text-left">
+                            <input type="phone" 
+                                class="form-control-mobile" 
+                                name="recipient" 
+                                placeholder="Enter Phone Number"
+                            />
+                          </div>
+                        
+                          <div class="form-group text-left" style="display: none;">
+                            <input type="phone" 
+                                  readonly ="readonly"
+                                  class="form-control-mobile" 
+                                  name="agentid"
+                                  value="{{item.user}}"
+                            /> 
+                          </div>
+                         
+                      </div>
+                      {% endfor %}
+                  </div>
+              
+                
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="reg-submit" >Send Coin</button>
+            </div>
+         </form>
+        </div>
+      </div>
+    </div> 
+     <!-- Redeem Coin (User) Modal -->
+     <div class="modal fade" id="redeemModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #e6f7faf0 !important">
+          <div class="modal-header">
+            <h5>Redeem Coins</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form class="form-control reg-form-modal" action="{% url 'redeem_coins' %}" method="POST">
+            <div class="modal-body"> 
+                {% csrf_token %}
+                  <div class="row">
+                      <div class="col-md-12">
+                        {% for item in userman %}
+                        <label>Amount</label>
+                        <div class="form-group text-left">
+                            <input type="text"
+                                class="form-control-mobile" 
+                                name="amount" 
+                                value="{{item.currentUserWastecoinBalance}} "
+                            />
+                          </div>
+                          
+                          <!-- <div class="form-group text-left" style="margin-top:50px;">
+                            <h5 style=" font-weight:600; color:green; text-align: center;"><img src="{% static 'wastecoin-currency-smaller.svg' %}" class="logo" alt="allocation-logo" />1  =  1kg = &#8358;{{allocatedWasteCoins.exchangeRate}}</h5>
+                        </div> -->
+                         
+                        <div class="form-group text-left" style="display: none;">
+                            <input type="text" 
+                                class="form-control-mobile" 
+                                readonly ="readonly"
+                                name="month" 
+                                value="{{allocatedWasteCoins.month}}"
+                            />
+                          </div>
+                          <br>
+                          <div class="form-group text-left" style="display: none;">
+                            <input type="phone" 
+                                readonly ="readonly"
+                                class="form-control-mobile" 
+                                name="phonenumber"
+                                value="{{item.user_phone}}"
+                            /> 
+                          </div>
+                          <div class="form-group text-left" style="display: none;">
+                            <input type="text" 
+                                readonly ="readonly"
+                                class="form-control-mobile" 
+                                name="state"
+                                value="{{item.user_state}}"
+                            /> 
+                          </div>
+                          
+                          <label>Incentive</label>
+                          <div class="form-group text-left">
+                            <select id="incentive" name= "incentive" class="form-control-mobile" >
+                              <option value="cash">Cash</option>
+                              <option value="recharge-card">Recharge Card</option>
+                              <option value="data">Data</option>
+                              <option value="other">Other</option>
+                            </select>
+                          </div>
+                         
+                      </div>
+                      {% endfor %}
+                  </div>
+              
+                
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="reg-submit" >Redeem Coin</button>
+            </div>
+            <!-- <h3 style="font-size:0.4rem; font-weight:600; color:red; text-align: center;">Please be duly informed that incentives especially cash will be sent to the <br>account details or phone number in our database. Thank you!</h3> -->
+         </form>
+        </div>
+      </div>
+    </div> 
+</body>
+<script>
+  $(function () {
+    $("#datetimepicker1").datetimepicker({
+      format: 'YYYY-MM-DD',
+    });
+  });
+  $(function () {
+    $("#datetimepicker2").datetimepicker({
+      format: 'YYYY-MM-DD',
+    });
+  });
+  // var message_success = document.getElementsByClassName("text-success");
+  // var message_danger = document.getElementsByClassName("text-success");
+  // setTimeout(function(){ 
+  //   message_success.style.display = "none"; 
+  // }, 3000);
+  // setTimeout(function(){ 
+  //   message_danger.style.display = "none"; 
+  // }, 3000);
+
+      var message_ele = document.getElementById("message_div");
+    
+    setTimeout(function(){ 
+       message_ele.style.display = "none"; 
+    }, 3000);
+    var message_ele_mobile = document.getElementById("message_div_mobile");
+    
+    setTimeout(function(){ 
+       message_ele_mobile.style.display = "none"; 
+    }, 3000);
+
+</script>
+</html>
+
+

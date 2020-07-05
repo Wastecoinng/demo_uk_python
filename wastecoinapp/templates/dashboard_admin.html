@@ -1,0 +1,340 @@
+{% extends "dashboard_admin_layout.html" %}
+{% block body%}
+{% load static %}
+<div class="row">
+  <nav class="sidenav">
+    
+    <ul class="navbar-nav mr-auto sidenav-ul">
+        <li class="nav-item sidenav-li" style="background-color: #2ad2be50;border-radius:5px; padding:1% 5%;">
+            <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'home.svg' %}" class="logo" alt="Home-logo" /><span class="sidenav-span">&nbsp;Home</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link" href="{% url 'profile' %}"><img src="{% static 'profile.svg' %}" class="logo" alt="Profile-logo" /> <span class="sidenav-span">Redeem Request</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link " href="{% url 'wallet' %}"><img src="{% static 'wallet.svg' %}" class="logo" alt="Wallet-logo" /><span class="sidenav-span">&nbsp;Back Allocation</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+          <a class="nav-link " href="{% url 'wallet' %}"><img src="{% static 'wallet.svg' %}" class="logo" alt="Wallet-logo" /><span class="sidenav-span">&nbsp;Agent Allocation</span></a>
+          </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link" href="{% url 'notification' %}"><img src="{% static 'notification.svg' %}"class="logo" alt="Notification-logo" /> 
+            {% if unreadMsg == 0 %}
+            <span class="sidenav-span">Messages</span>
+            {% else %}
+            <span class="sidenav-span">Messages</span><span class="badge badge-info">{{unreadMsg}}</span>
+            {% endif %}
+        </a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link " href="{% url 'signout' %}"><img src="{% static 'logout.svg' %}" class="logo" alt="Logout-logo" /><span class="sidenav-span">&nbsp;Logout</span></a>
+        </li>
+    </ul>
+    <div class="sidenav-ul-mobile">
+        <div class="menu-box">
+            <a href="{% url 'notification' %}">
+                <img src="{% static 'notification-white.svg' %}" class="logo" alt="Notification-logo" />
+                {% if unreadMsg == 0 %}
+                <div class="sidenav-inner-div">Notification</div>
+                {% else %}
+                <span class="badge badge-danger" style="margin-left:-22px">{{unreadMsg}}</span>
+                <div class="sidenav-inner-div">Notification</div>
+                {% endif %}
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'wallet' %}">
+                <img src="{% static 'wallet-white.svg' %}" class="logo" alt="Wallet-logo" />
+                <div class="sidenav-inner-div">Wallet</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'home_green.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Home</div>
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'profile' %}">
+                <img src="{% static 'profile-white.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Profile</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'signout' %}">
+                <img src="{% static 'logout-white.svg' %}" class="logo" alt="Logout-logo" />
+                <div class="sidenav-inner-div">Logout</div>
+            </a>
+        </div>
+    </div>
+  </nav>
+  <div class="dashboard-inner" style="float:right">
+        <div class="card-body leadersboard-header" style="font-size:80%;">
+          <h5>Search parameters</h5>
+          <nav class="navbar" style="justify-content: center!important; padding:0!important">
+              <form class="form-inline" action="{% url 'dashboard_query' %}" method="POST">
+                  {% csrf_token %}
+                  <span>State</span>
+                  <div class="input-group date">
+                    <select id="state" name= "state" class="form-control-mobile" >
+                      <option  selected value="{{item.user_state}}">{{item.user_state}}</option>
+                      <option value="Abia">Abia</option>
+                      <option value="Adamawa">Adamawa</option>
+                      <option value="Akwa Ibom">Akwa Ibom</option>
+                      <option value="Anambra">Anambra</option>
+                      <option value="Bauchi">Bauchi</option>
+                      <option value="Bayelsa">Bayelsa</option>
+                      <option value="Benue">Benue</option>
+                      <option value="Borno">Borno</option>
+                      <option value="Cross Rive">Cross River</option>
+                      <option value="Delta">Delta</option>
+                      <option value="Ebonyi">Ebonyi</option>
+                      <option value="Edo">Edo</option>
+                      <option value="Ekiti">Ekiti</option>
+                      <option value="Enugu">Enugu</option>
+                      <option value="Abuja">Federal Capital Territory</option>
+                      <option value="Gombe">Gombe</option>
+                      <option value="Imo">Imo</option>
+                      <option value="Jigawa">Jigawa</option>
+                      <option value="Kaduna">Kaduna</option>
+                      <option value="Kano">Kano</option>
+                      <option value="Katsina">Katsina</option>
+                      <option value="Kebbi">Kebbi</option>
+                      <option value="Kogi">Kogi</option>
+                      <option value="Kwara">Kwara</option>
+                      <option value="Lagos">Lagos</option>
+                      <option value="Nasarawa">Nasarawa</option>
+                      <option value="Niger">Niger</option>
+                      <option value="Ogun">Ogun</option>
+                      <option value="Ondo">Ondo</option>
+                      <option value="Osun">Osun</option>
+                      <option value="Oyo">Oyo</option>
+                      <option value="Plateau">Plateau</option>
+                      <option value="Rivers">Rivers</option>
+                      <option value="Sokoto">Sokoto</option>
+                      <option value="Taraba">Taraba</option>
+                      <option value="Yobe">Yobe</option>
+                      <option value="Zamfara">Zamfara</option>
+                  </select>
+                    </div>
+                    <span>From</span>
+                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                        <input id="id_date" class="form-control datetimepicker-input date-form mr-sm-2" type="text"  name="from" style="border:0;" data-target="#datetimepicker1">
+                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                      </div>
+                <!-- <input class="form-control date-form mr-sm-2" type="date"  name="from" style="border:0;"> -->
+                <span>To</span>
+                <div class="input-group date date-form" id="datetimepicker2" data-target-input="nearest" >
+                  <input class="form-control date-form mr-sm-2 datetimepicker-input" type="text"  name="to" style="border:0;" data-target="#datetimepicker2">
+                  <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+              </div>
+                <!-- <input class="form-control date-form mr-sm-2" type="date"  name="to" style="border:0;">  -->
+                <button class="btn my-2 my-sm-0" type="submit" style="background-color: #1773A6; color: #ccc; border:0;">Search</button>
+              </form>
+            </nav>
+      </div>
+        <div >
+            <div class="row mb-3">
+                <div class="col-xl-3 col-lg-6">
+                  <div class="card card-inverse card-success">
+                    <div class="card-block bg-success">
+                      <div class="rotate">
+                        <i class="fa fa-user fa-5x"></i>
+                      </div>
+                      <h6 class="text-uppercase">Miners</h6>
+                      <h1 class="display-1">{{totalMiners}}</h1>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                  <div class="card card-inverse card-danger">
+                    <div class="card-block bg-danger">
+                      <div class="rotate">
+                        <i class="fa fa-list fa-4x"></i>
+                      </div>
+                      <h6 class="text-uppercase">Agents</h6>
+                      <h1 class="display-1">{{totalAgents}}</h1>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                  <div class="card card-inverse card-info">
+                    <div class="card-block bg-info">
+                      <div class="rotate">
+                        <i class="fa fa-google-wallet fa-5x"></i>
+                      </div>
+                      <h6 class="text-uppercase">Redeem Coins Requests</h6>
+                      <h1 class="display-1">{{redeemRequests}}</h1>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                  <div class="card card-inverse card-warning">
+                    <div class="card-block bg-warning">
+                      <div class="rotate">
+                        <i class="fa fa-share fa-5x"></i>
+                      </div>
+                      <h6 class="text-uppercase">Messages</h6>
+                      <h1 class="display-1">{{totalMessages}}</h1>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--/row-->
+      
+              <hr>
+        </div>
+    <div class="row dashboard-home-inner">
+        
+        <div class="pull-left">
+            {% if error == "0" %}
+                <div class='text-center alert alert-info' id="message_div">{{message}}</div>
+            {% else %}
+                <div class='text-center text-danger' id="message_div">{{message}}</div>
+            {% endif %}
+            <div class="card dashboard-home-card" >
+                <div class="card-body dashboard-home-card-body">
+                  <div class="left">
+                    <h5 class="card-title" style="font-size:12px;font-weight: bold;">ALLOCATED WASTECOINS</h5>
+                    <div>
+                        <div ><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.5rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{allocatedWasteCoins.allocatedCoins}}</h2></div>
+                    </div>
+                    <p class="card-text" style="margin-top:20px;">{{totalCoins.allocatedCoins__sum}}</p>
+                  </div>
+                  <div class="right" style="float: right;">
+                    <img src="{% static 'allocation.svg' %}" class="logo" alt="allocation-logo" />
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="pull-right"> 
+            <div class="card dashboard-home-card" >
+                <div class="card-body dashboard-home-card-body">
+                  <div class="left">
+                    <h5 class="card-title" style="font-size:12px;font-weight: bold;">TOTAL WASTE MINED</h5>
+                    <h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important; font-size: 1.9rem;">&#8358;{{minedCoins.minedCoin__sum|floatformat:"2"}}</h2>
+                    <p class="card-text">From {{From}} to {{To}}</p>
+                  </div>
+                  <div class="right" style="float: right;">
+                    <img src="{% static 'exchange-rate.svg' %}" class="logo" alt="allocation-logo" />
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row dashboard-home-inner">
+        <div class="pull-left">
+            <div class="card dashboard-home-card" >
+                <div class="card-body dashboard-home-card-body">
+                  <div class="left">
+                    <h5 class="card-title" style="font-size:12px; font-weight: bold;">Summary</h5>
+                    <div class="dashboard-home-card-body">
+                        <div class="left" >
+                            <p class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;">Mined</p>
+                            {% load mathfilters %}
+                            {% with answer=minedCoins.minedCoin__sum|div:allocatedWasteCoins.allocatedCoins %}
+                            <h5 class="card-text" style="color: #1070CA;">
+                                 {{ answer|mul:100|floatformat }} %</h5>
+                            {% endwith %}
+                        </div>
+                        <div class="right" >
+                            <p class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;">Unmined</p>
+                            {% load mathfilters %}
+                            {% with answeru=minedCoins.minedCoin__sum|div:allocatedWasteCoins.allocatedCoins %}
+                            <h5 class="card-text" style="color: #F7545E;">
+                                 {{ 1|sub:answeru|mul:100|floatformat }} %</h5>
+                            {% endwith %}
+                        </div>
+                    </div>
+                  </div>
+                  <div class="right" style="float: right;">
+                    <img src="{% static 'allocation.svg' %}" class="logo" alt="allocation-logo" />
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="pull-right"> 
+            <div class="card dashboard-home-card" >
+                <div class="card-body dashboard-home-card-body">
+                  <div class="left">
+                    <h5 class="card-title" style="font-size:12px;font-weight: bold;">TOTAL WASTE MINED</h5>
+                    <div style="width:130px;">
+                        <div ><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.5rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{minedCoins.minedCoin__sum|floatformat:"2"}}</h2></div>
+                    </div>
+                    <p class="card-text">{{allocatedWasteCoins.month}}</p>
+                  </div>
+                  <div class="right" style="float: rigth;">
+                    <img src="{% static 'total-waste.svg' %}" class="logo" alt="allocation-logo" />
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- mobile -->
+    <div class="dashboard-home-inner-mobile">
+        <div class="reg-header text-center"></a>Dashboard</div>
+        <div class="col-12">
+            {% if error == "0" %}
+                <div class='text-center alert alert-info' style="font-size: 0.8rem;" id="message_div">{{message}}</div>
+            {% else %}
+                <div class='text-center text-danger' style="font-size: 0.8rem;" id="message_div">{{message}}</div>
+            {% endif %}
+            <div class="card" style="width:100%; background-color:#1773A6; border-radius: 5px 5px 0 0; margin-bottom: 20px;" >
+                <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                    <h3 class="card-text" style="color: #2AD2BE; font-size: 1.05rem;">{% for item in userman %}
+                        Hi! {{item.firstname}}
+                      {% endfor %}</h3>
+                    <p class="card-text" style="color: #fff; font-size:0.7rem;">Available WasteCoin for <br>hi</p>
+                    <div style="float: left;">
+                        <div ><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 0.8rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> hi</h2></div>
+                    </div>
+                    <div style="width:120px; float: right; text-align: center; margin-top:-35px;">
+                        <h6 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important; font-size:0.7rem;">Exchange Rate</h6>
+                        <div style="width:50px; height:50px; background-color: #2AD2BE; border-radius: 50%; font-size: 0.8rem; padding-top:15px; font-weight:bold; margin:auto;">hi</div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card " style="background-color: #38C8E84A;">
+                    <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                        <div style="width:130px;">
+                            <!-- <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div> -->
+                            <div ><h2 class="card-subtitle mb-2 text-muted" style="color: rgb(120, 122, 126)!important; font-size: 0.8rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" />hi</h2></div>
+                        </div>
+                        <!-- <h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;"><span><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></span>5342</h2> -->
+                        <p class="card-text" style="color: #000; font-weight: 500; font-size: 0.73rem; margin-top: 20px;">Mined <br>WasteCoins</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card" style="background-color: #2AD2BE4A;" >
+                    <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                        <div style="width:130px;">
+                            <!-- <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div> -->
+                            {% load mathfilters %}
+                            <div><h2 class="card-subtitle mb-2 text-muted" style="color: rgb(120, 122, 126)!important;font-size: 0.8rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> hi </h2></div>
+                        </div>
+                        <!-- <h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;"><span><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></span>5342</h2> -->
+                        <p class="card-text" style="color: #000; font-weight: 500; font-size: 0.73rem; margin-top: 20px;">Unmined <br>WasteCoins</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+   
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+

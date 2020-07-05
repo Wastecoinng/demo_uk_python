@@ -1,0 +1,216 @@
+{% extends "dashboard_layout.html" %}
+{% block body%}
+{% load static %}
+<div class="row">
+  <nav class="sidenav">
+    
+    <ul class="navbar-nav mr-auto sidenav-ul">
+        <li class="nav-item sidenav-li" >
+            <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'home.svg' %}" class="logo" alt="Home-logo" /><span class="sidenav-span">&nbsp;Home</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link" href="{% url 'profile' %}"><img src="{% static 'profile.svg' %}" class="logo" alt="Profile-logo" /> <span class="sidenav-span">Profile</span></a>
+        </li>
+        <li class="nav-item sidenav-li" style="background-color: #2ad2be50;border-radius:5px; padding:1% 5%;">
+        <a class="nav-link " href="{% url 'wallet' %}"><img src="{% static 'wallet.svg' %}" class="logo" alt="Wallet-logo" /><span class="sidenav-span">&nbsp;Wallet</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link" href="{% url 'notification' %}"><img src="{% static 'notification.svg' %}"class="logo" alt="Notification-logo" /> 
+            {% if unreadMsg == 0 %}
+            <span class="sidenav-span">Notification</span>
+            {% else %}
+            <span class="sidenav-span">Notification</span><span class="badge badge-info">{{unreadMsg}}</span>
+            {% endif %}
+        </a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link " href="{% url 'signout' %}"><img src="{% static 'logout.svg' %}" class="logo" alt="Logout-logo" /><span class="sidenav-span">&nbsp;Logout</span></a>
+        </li>
+    </ul>
+    <div class="sidenav-ul-mobile">
+        <div class="menu-box">
+            <a href="{% url 'notification' %}">
+                <img src="{% static 'notification-white.svg' %}" class="logo" alt="Notification-logo" />
+                {% if unreadMsg == 0 %}
+                <div class="sidenav-inner-div">Notification</div>
+                {% else %}
+                <span class="badge badge-danger" style="margin-left:-22px">{{unreadMsg}}</span>
+                <div class="sidenav-inner-div">Notification</div>
+                {% endif %}
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'wallet' %}" >
+                <img src="{% static 'wallet_green.svg' %}" class="logo" alt="Wallet-logo" />
+                <div class="sidenav-inner-div">Wallet</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'home-white.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Home</div>
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'profile' %}">
+                <img src="{% static 'profile-white.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Profile</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'signout' %}">
+                <img src="{% static 'logout-white.svg' %}" class="logo" alt="Logout-logo" />
+                <div class="sidenav-inner-div">Logout</div>
+            </a>
+        </div>
+    </div>
+  </nav>
+  <div class="dashboard-inner" style="float:right">
+    
+    <div class="row dashboard-home-inner">
+        <div style="width:50%;">
+            {% if error == "0" %}
+                <div class='text-center alert alert-info' id="message_div">{{message}}</div>
+            {% else %}
+                <div class='text-center text-danger' id="message_div">{{message}}</div>
+            {% endif %}
+            <div class="card " >
+                <div class="card-body" style="color:#66788A; padding:5%;">
+                  <div class="left">
+                    <h5 class="card-title" style="font-size:12px;font-weight: bold;">ACCOUNT OVERVIEW</h5>
+                    <div style="display: flex;">
+                        <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div>
+                        {% for item in userman %}
+                        <div style="float: right;"><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.9rem;">{{item.currentUserWastecoinBalance}}  </h2>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <p class="card-text" style="margin-top:60px; font-size:0.8rem;">Current WasteCoin Balance</p>
+                  </div>
+                  <div class="right" style="float: right;text-align: center; margin-bottom:-50px;">
+                    <p class="card-text" style="font-size:0.8rem;">Redeem coins</p>
+                    <img src="{% static 'redeemcoins.svg' %}" class="logo" alt="allocation-logo"data-toggle="modal" data-target="#redeemModal" />
+                  </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- mobile -->
+    <div class="dashboard-home-inner-mobile">
+        <div class="reg-header text-center"></a>Wallet</div>
+        <div class="col-12">
+            {% if error == "0" %}
+                <div class='text-center alert alert-info' style="font-size: 0.8rem;" id="message_div_mobile">{{message}}</div>
+            {% else %}
+                <div class='text-center text-danger' style="font-size: 0.8rem;" id="message_div_mobile">{{message}}</div>
+            {% endif %}
+            <div class="card" style="width:100%; background-color:#1773A6; border-radius: 5px 5px 0 0; margin-bottom: 20px;" >
+                <div class="card-body " style="padding: 0.5rem 1rem!important;">
+                    <h3 class="card-text" style="color: #2AD2BE; font-size: 1.05rem;">Account Overview</h3>
+                    <p class="card-text" style="color: #fff; font-size:0.7rem;">Current WasteCoin Balance</p>
+                    <div style="width:130px; float: left;">
+                        <!-- <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div> -->
+                        {% for item in userman %}
+                        <div ><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.0rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{item.currentUserWastecoinBalance}} </h2></div>
+                        {% endfor %}
+                    </div>
+                    <div style="width:120px; float: right; text-align: center; margin-top:-35px;">
+                        <h6 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important; font-size:0.7rem;">Redeem Coins</h6>
+                        <img src="{% static 'redeemcoins.svg' %}" class="logo" alt="allocation-logo" data-toggle="modal" data-target="#redeemModal"/>
+                    </div>
+                    <!-- <h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /><span>5342</span></h2> -->
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- LEADERS BAORD -->
+    <div class="card " style="margin-top:20px;">
+        
+        <div class="card-body leadersboard-header" style="font-size:80%;">
+            <h5>Transaction History</h5>
+            <nav class="navbar" style="justify-content: center!important; padding:0!important">
+                <form class="form-inline" action="{% url 'transaction_user_search' %}" method="POST">
+                    {% csrf_token %}
+                    <span>From</span>
+                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                        <input id="id_date" class="form-control datetimepicker-input date-form mr-sm-2" type="text"  name="from" style="border:0;" data-target="#datetimepicker1">
+                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                      </div>
+                  <!-- <input class="form-control date-form mr-sm-2" type="date"  name="from" style="border:0;"> -->
+                  <span>To</span>
+                  <div class="input-group date date-form" id="datetimepicker2" data-target-input="nearest" >
+                    <input class="form-control date-form mr-sm-2 datetimepicker-input" type="text"  name="to" style="border:0;" data-target="#datetimepicker2">
+                    <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+                  <!-- <input class="form-control date-form mr-sm-2" type="date"  name="to" style="border:0;">  -->
+                  <button class="btn my-2 my-sm-0" type="submit" style="background-color: #1773A6; color: #ccc; border:0;">Search</button>
+                </form>
+              </nav>
+        </div>
+        
+    </div>
+    <div style="width:100%; max-height:450px; overflow-y:auto">
+        {% if transaction %} 
+                    <table class="table table-striped" style="overflow-y: scroll;">
+                        <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Recipient</th>
+                            <th scope="col">Sender</th>
+                            <!-- <th scope="col">Transaction</th> -->
+                        </tr>
+                        </thead>
+                        <tbody>
+                    {% for t in transaction %}
+                        <tr>
+                            <th scope="row">{{t.date_added_normal}}</th>
+                            <td><img src="{% static 'wastecoin-currency-smaller.svg' %}" class="logo" alt="allocation-logo" /> {{t.amount}}</td>
+                            <td>{{t.recipient}}</td>
+                            <td>{{t.sender}}</td>
+                            <!-- <td>{{t.transaction_type}}</td> -->
+                        </tr>
+                    {% endfor %}
+                        </tbody>
+                    </table> 
+                {% else %}
+                    <div class='text-center text-primary' style="margin-top:50px;">There is no transaction data for the account yet</div>
+                {% endif %}
+                <!-- PAGINATION -->
+            {% if transaction.has_other_pages %}
+            <ul class="pagination" style="justify-content: center!important;">
+                {% if transaction.has_previous %}
+                <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ transaction.previous_page_number }}" style="color: #000;">&laquo;</a></li>
+                {% else %}
+                <li class="disabled" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in transaction.paginator.page_range %}
+                {% if transaction.number == i %}
+                    <li class="active" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                    <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ i }}" style="color: #000;">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if transaction.has_next %}
+                <li style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><a href="?page={{ transaction.next_page_number }}" style="color: #000;">&raquo;</a></li>
+                {% else %}
+                <li class="disabled" style="width:25px; text-align:center; border:1px solid #35b5b5; border-radius:3px;"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+        
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+

@@ -176,14 +176,24 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'wastecoinng@gmail.com'
-EMAIL_HOST_PASSWORD = 'wastecoin@2020'
-EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'wastecoinng@gmail.com'
+# EMAIL_HOST_PASSWORD = 'wastecoin@2020'
+# EMAIL_PORT = 587
 
 # EMAIL_USE_TLS = True
 # EMAIL_HOST = 'smtp-pulse.com'
 # EMAIL_HOST_USER = 'wastecoinng@gmail.com'
 # EMAIL_HOST_PASSWORD = 'CqPB7F9oMiYpc'
-# EMAIL_PORT = 2525
+# EMAIL_PORT = 587
+
+import requests
+response = requests.get("https://mailtrap.io/api/v1/inboxes.json?api_token=a3a987e24ab3303a19e26ba1e8df9b9a")
+credentials = response.json()[0]
+
+EMAIL_HOST = credentials['domain']
+EMAIL_HOST_USER = credentials['username']
+EMAIL_HOST_PASSWORD = credentials['password']
+EMAIL_PORT = credentials['smtp_ports'][0]
+EMAIL_USE_TLS = True

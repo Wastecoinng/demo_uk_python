@@ -1,0 +1,7 @@
+DEBUG=<boolean>
+SECRET_KEY=<your secret key here>
+EMAIL_HOST = <your email host here>
+EMAIL_HOST_USER = <your email host user here>
+EMAIL_HOST_PASSWORD = <your password here>
+EMAIL_PORT = <your email port here>
+EMAIL_USE_TLS = <boolean>

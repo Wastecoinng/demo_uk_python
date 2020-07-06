@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import dj_database_url
+from decouple import config
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -19,11 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'qn)^b8x*zk6av_aw71i2@hq10-ieb!f8$qvhi0==$hy_0x8&y9'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = False
+DEBUG = config('DEBUG', default=False, cast=bool)
+TEMPLATE_DEBUG = DEBUG
+# DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com','.wastecoin.co.uk']
 
@@ -176,24 +179,15 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = 'wastecoinng@gmail.com'
-# EMAIL_HOST_PASSWORD = 'wastecoin@2020'
-# EMAIL_PORT = 587
 
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp-pulse.com'
-# EMAIL_HOST_USER = 'wastecoinng@gmail.com'
-# EMAIL_HOST_PASSWORD = 'CqPB7F9oMiYpc'
-# EMAIL_PORT = 587
+# EMAIL_USE_TLS = os.environ['EMAIL_USE_TLS']
+# EMAIL_HOST = os.environ['EMAIL_HOST']
+# EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+# EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+# EMAIL_PORT = os.environ['EMAIL_PORT']
 
-import requests
-response = requests.get("https://mailtrap.io/api/v1/inboxes.json?api_token=a3a987e24ab3303a19e26ba1e8df9b9a")
-credentials = response.json()[0]
-
-EMAIL_HOST = credentials['domain']
-EMAIL_HOST_USER = credentials['username']
-EMAIL_HOST_PASSWORD = credentials['password']
-EMAIL_PORT = credentials['smtp_ports'][0]
-EMAIL_USE_TLS = True
+EMAIL_HOST = config('EMAIL_HOST', default='localhost')
+EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)

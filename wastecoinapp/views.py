@@ -248,7 +248,7 @@ def user_registrationapi(request):
                 send_mail(
                     str(user.first_name)+'! Please Activate your Account',
                     'Your verification Code is '+ str(code),
-                    'wastecoinng@gmail.com',
+                    'info@farmdelite.com',
                     [email],
                     fail_silently=False,
                 )

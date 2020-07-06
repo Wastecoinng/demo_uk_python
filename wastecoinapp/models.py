@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 import datetime
 
+
 # Create your models here.
 class WastecoinUser(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -66,6 +67,7 @@ class Coin(models.Model):
 
 class otp(models.Model):
     user=models.CharField(max_length=200,verbose_name="User")
+    # user=models.ForeignKey(User,on_delete=models.CASCADE)
     # user_phone = models.CharField(max_length=200, unique=True, null=True, verbose_name="Telephone number")
     otp_code = models.IntegerField(verbose_name="OTP",blank=False)
     validated = models.BooleanField(default=False)

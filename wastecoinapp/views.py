@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login,logout, authenticate
 from CustomCode import string_generator,password_functions,validator,autentication
 from django.db.models import Sum,Q
+from django.core.mail import send_mail
 # from CustomCode import string_generator,password_functions,validator,autentication
 
 
@@ -45,65 +46,94 @@ def privatepolicy(request):
 def registeragent(request):
     return render(request,"registerAgent.html") 
 
-#User verfication
+
 # @api_view(["POST"])
 # def user_verification(request):
-#     try:
-#         otp_entered = request.data.get("otp",None)
-#         if otp_entered != None and otp_entered != "":
-#             user_data = otp.objects.get(user=request.session['phone_number'])
-#             otpCode,date_added = str(user_data.otp_code),user_data.date_added
-#             date_now = datetime.now(timezone.utc)
-#             duration = float((date_now - date_added).total_seconds())
-#             timeLimit = 1800.0 #30 mins interval
-#             if otp_entered == otpCode and duration < timeLimit:
-#                 #validate user
-#                 user_data.validated = True
-#                 user_data.save()
-#                 return_data = {
-#                     "error": "0",
-#                     "message":"Congratulations! Your account has been Verified."
-#                 }
-#                 return render(request,"login.html", return_data) 
-#             elif otp_entered != otpCode and duration < timeLimit:
-#                 return_data = {
-#                     "error": "1",
-#                     "message": "Incorrect OTP"
-#                 }
-#             elif otp_entered == otpCode and duration > timeLimit:
-#                 user_data.save()
-#                 return_data = {
-#                     "error": "1",
-#                     "message": "OTP has expired"
-#                 }
-#         else:
-#             return_data = {
-#                 "error": "2",
-#                 "message": "Invalid Parameters"+str(user_data.user)
-#             }
-#     except Exception as e:
+#     email =str(request.session['email'])
+#     # appuser = User.objects.get(username=email)
+#     otp_entered = request.data.get("otp",None)
+#     if otp_entered != None and otp_entered != "":
+#         # user = authenticate(request,username=appuser.email, password =appuser.password )
+#         user_data = otp.objects.get(user=email)
+#         # if user:
 #         return_data = {
-#             "error": "3",
-#             "message": str(e)+str(user_data.user)
+#             "error": "0",
+#             "message":"hu u are getting there."+str(user_data)
 #         }
-#     return render(request,"verification.html", return_data) 
 
-# # resend code
-# def resend_code(request):
-#     user_data = otp.objects.get(user=request.session['phone_number'])
-#     newCode = string_generator.numeric(6)
+#         return render(request,"verification.html", return_data) 
 
-#     updateOtp=otp.objects.filter(user=user_data.user_phone).update(otp_code=newCode)
-#     verification.messages.create(
-#         from_=twilio_number, 
-#         to="+234"+request.session['phone_number'],
-#         body='You new verification code is: '+ newCode                
-#         )
-#     return_data = {
-#         "error": "0",
-#         "message":"New Verification code has been sent to your device",
-#         }
-#     return render(request,"verification.html", return_data) 
+# User verfication
+@api_view(["POST"])
+def user_verification(request):
+    try:
+        otp_entered = request.data.get("otp",None)
+        if otp_entered != None and otp_entered != "":
+            # user = authenticate(request,username=request.session['email'])
+            user_data = otp.objects.get(user=request.session['email'])
+            otpCode,date_added = str(user_data.otp_code),user_data.date_added
+            date_now = datetime.now(timezone.utc)
+            duration = float((date_now - date_added).total_seconds())
+            timeLimit = 1800.0 #30 mins interval
+            if otp_entered == otpCode and duration < timeLimit:
+                #validate user
+                user_data.validated = True
+                user_data.save()
+                return_data = {
+                    "error": "0",
+                    "message":"Congratulations! Your account has been Verified."
+                }
+                return render(request,"login.html", return_data) 
+            elif otp_entered != otpCode and duration < timeLimit:
+                return_data = {
+                    "error": "1",
+                    "message": "Incorrect OTP"
+                }
+            elif otp_entered == otpCode and duration > timeLimit:
+                user_data.save()
+                return_data = {
+                    "error": "1",
+                    "message": "OTP has expired"
+                }
+        else:
+            return_data = {
+                "error": "2",
+                "message": "Invalid Parameters"+str(user_data.user)
+            }
+    except Exception as e:
+        return_data = {
+            "error": "3",
+            "message": str(e)
+        }
+    return render(request,"verification.html", return_data) 
+
+# resend code
+def resend_code(request):
+    email =request.session['email']
+    initial = 1
+    generator =string_generator.numeric(5)
+    stringCode = str(initial) +''+str(generator)
+    newCode = int(stringCode)
+
+    updateOtp=otp.objects.filter(user=email).update(otp_code=newCode)
+    if updateOtp:
+        send_mail(
+        'Please Activate your Account, Again!',
+        'Your verification Code is '+ str(newCode),
+        'info@wastecoin.co',
+        [email],
+        # fail_silently=False,
+        )
+        return_data = {
+            "error": "0",
+            "message":"New Verification code has been sent to "+ str(email),
+        }
+    else:
+        return_data = {
+        "error": "1",
+        "message":"Sorry try again",
+        }
+    return render(request,"verification.html", return_data) 
 
 # # User login
 # @api_view(["POST"])
@@ -150,9 +180,9 @@ def user_loginapi(request):
         return HttpResponseRedirect(reverse("dashboard_admin"))
     # newly added end
 
-    user_validation = otp.objects.get(user=email_phone)
+    user_validation = otp.objects.get(user=user)
     if  user is not None and user_validation.validated is False:
-         return render(request,"login.html",{"message":"Your Account is not validated! Please call 070-000-000-00 for immediate assistance"})
+         return render(request,"verification.html",{"message":"Your Account is not validated! Please call 070-000-000-00 for immediate assistance"})
 
     
 
@@ -202,14 +232,26 @@ def user_registrationapi(request):
                 user.last_name=lastName
                 user.save()
                 #Generate OTP
-                code = string_generator.numeric(6)
+                initial = 5
+                generator =string_generator.numeric(5)
+                stringCode = str(initial) +''+str(generator)
+                Otpcode = int(stringCode)
+                code = Otpcode
                 #Save OTP
-                user_OTP =otp(user=email,otp_code=code, validated=True)
+                user_OTP =otp(user=user,otp_code=code)
+                # user_OTP =otp(user=email,otp_code=code, validated=True)
                 user_OTP.save()
                 m = WastecoinUser(user=user, firstname=firstName, lastname=lastName, email=email, user_state=state, user_country=country) 
                 m.save()
                 n = notifications(sender="Admin", header="Welcome to WasteCoin, "+ str(user.first_name)+"!", message="Thank you for joining WasteCoin, "+ str(user.first_name)+"! Let's get the mining started already!", receiver=user) 
                 n.save()
+                send_mail(
+                    str(user.first_name)+'! Please Activate your Account',
+                    'Your verification Code is '+ str(code),
+                    'info@wastecoin.co',
+                    [email],
+                    fail_silently=False,
+                )
                 # verification.messages.create(
                 #     from_=twilio_number, 
                 #     to="+234"+phoneNumber,
@@ -219,7 +261,7 @@ def user_registrationapi(request):
                     "error": "0",
                     "message":"The registration was successful.",
                     }
-                # return render(request,"verification.html", return_data) 
+                return render(request,"verification.html", return_data) 
         else:
             return_data = {
                 "error":"2",

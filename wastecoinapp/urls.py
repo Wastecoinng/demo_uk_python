@@ -33,7 +33,8 @@ urlpatterns = [
     path("send_coins", views.send_coins, name="send_coins"),
     path("update_agent_biodata", views.update_agent_biodata, name="update_agent_biodata"),
     path("dashboard_query", views.dashboard_search_query, name="dashboard_query"),
-    # path("resend_code", views.resend_code, name="resend_code"),
+    path("resend_code", views.resend_code, name="resend_code"),
+    path("verification", views.user_verification, name="verify"),
     path("update_account", views.update_account, name="update_account"),
     path("update_agent_account", views.update_agent_account, name="update_agent_account"),
     

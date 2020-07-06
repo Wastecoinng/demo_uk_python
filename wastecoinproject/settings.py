@@ -22,8 +22,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'qn)^b8x*zk6av_aw71i2@hq10-ieb!f8$qvhi0==$hy_0x8&y9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com','.wastecoin.co.uk']
 
@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'wastecoinproject.wsgi.application'
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db_uk.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db_new.sqlite3'),
      }
 }
 
@@ -176,8 +176,14 @@ STATICFILES_DIRS = (
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'wastecoinng@gmail.com'
+EMAIL_HOST_PASSWORD = 'wastecoin@2020'
+EMAIL_PORT = 587
+
 # EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST = 'smtp-pulse.com'
 # EMAIL_HOST_USER = 'wastecoinng@gmail.com'
-# EMAIL_HOST_PASSWORD = 'wastecoin1234'
-# EMAIL_PORT = 587
+# EMAIL_HOST_PASSWORD = 'CqPB7F9oMiYpc'
+# EMAIL_PORT = 2525

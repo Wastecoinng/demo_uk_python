@@ -100,11 +100,19 @@
                               </div>
                     
                               <div class="form-group text-left">
+                                {% if item.user_address %}
                                 <input type="text" 
                                     class="form-control-profile" 
                                     name="address" 
                                     value="{{item.user_address}}"
                                 />
+                                {% else %}
+                                <input type="text" 
+                                    class="form-control-profile" 
+                                    name="address" 
+                                    placeholder="Address"
+                                />
+                                {% endif %}
                               </div>
                           </div>
                     
@@ -118,11 +126,19 @@
                               </div>
                     
                               <div class="form-group text-left">
+                                {% if item.user_phone %}
                                 <input type="phone" 
                                     class="form-control-profile" 
                                     name="phonenumber" 
                                     value="{{item.user_phone}}"
                                 />
+                                {% else %}
+                                <input type="text" 
+                                    class="form-control-profile" 
+                                    name="address" 
+                                    placeholder="Phone Number"
+                                />
+                                {% endif %}
                               </div>
 
                               <div class="form-group text-left">
@@ -154,6 +170,7 @@
                         {% for item in userman %}
                           <div class="row">
                               <div class="col-md-12">
+                                {% if item.accountname %}
                                  <div class="form-group text-left">
                                     <input type="text" 
                                         class="form-control-profile" 
@@ -177,6 +194,31 @@
                                         value="{{item.bank}}"
                                     />
                                   </div>
+                                {% else %}
+                                <div class="form-group text-left">
+                                    <input type="text" 
+                                        class="form-control-profile" 
+                                        name="accountname" 
+                                        placeholder="Account Name"
+                                    />
+                                  </div>
+                        
+                                  <div class="form-group text-left">
+                                    <input type="text" 
+                                        class="form-control-profile" 
+                                        name="accountnumber" 
+                                        placeholder="Account Number"
+                                    />
+                                  </div>
+                        
+                                  <div class="form-group text-left">
+                                    <input type="text" 
+                                        class="form-control-profile" 
+                                        name="bank" 
+                                        placeholder="Bank Name"
+                                    />
+                                  </div>
+                                {% endif %}
                               </div>
                           </div>
                           
@@ -262,7 +304,11 @@
                         </div>
                         <div class="row">
                             <div style="float: left;padding-right:30px; width:100px;font-size:0.6rem;">Address</div>
+                            {% if item.user_address %}
                             <div style="float: right; font-weight: 600; font-size:0.55rem;">{{item.user_address}}, <br>{{item.user_state}}, {{item.user_country}}</div>
+                            {% else %}
+                            <div style="float: right; font-weight: 600; font-size:0.55rem;">Address, <br>{{item.user_state}}, {{item.user_country}}</div>
+                            {% endif %}
                         </div>
                     </form>
                 </div>
@@ -276,6 +322,7 @@
                         <h5 style="float:left; color:#3A3B3F;">Account Details</h5>
                         <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#accountModal"/>
                     </div>
+                    {% if item.accountname %}
                     <div class="row" style="border-top:1px solid #ccc;">
                         <div style="float: left;width:100px;padding-right: 30px; font-size:0.6rem;">Account Name</div>
                         <div style="float: right; font-weight: 600;font-size:0.55rem;">{{item.accountname}}</div>
@@ -288,6 +335,12 @@
                         <div style="float: left;width:100px;padding-right: 30px; font-size:0.6rem;">Bank Name</div>
                         <div style="float: right; font-weight: 600;font-size:0.6rem;">{{item.bank}}</div>
                     </div>
+                    {% else %}
+                    <div class="row" style="border-top:1px solid #ccc;">
+                        <div style="font-size:0.6rem;">Click on the Edit icon to add your Account Details</div>
+                    </div>
+                    
+                    {% endif %}
                 </div>
             </div>
             

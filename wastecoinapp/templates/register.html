@@ -15,8 +15,8 @@
   {% endif %}
   <form class="form-control reg-form" action="{% url 'registerapi' %}" method="POST">
     {% csrf_token %}
-  <div class="row">
-      <div class="col-md-6">
+  <div class="row form-row" >
+      <div class="col-md-12">
          <div class="form-group text-left">
             <input type="text" 
                 class="form-control-login" 
@@ -32,15 +32,6 @@
                 placeholder="Last Name"
             />
           </div>
-
-          <div class="form-group text-left">
-            <input type="phone" 
-                class="form-control-login" 
-                name="phonenumber" 
-                placeholder="Phone Number"
-            />
-          </div>
-
           <div class="form-group text-left">
             <input type="email" 
                 class="form-control-login" 
@@ -48,17 +39,41 @@
                 placeholder="Email"
             />
           </div>
+          
           <div class="form-group text-left">
+            <input type="password" 
+                class="form-control-login" 
+                name="password" 
+                placeholder="Password"
+            />
+          </div>
+          <div class="form-group text-left">
+            <input type="password" 
+                class="form-control-login" 
+                name="confirmPassword" 
+                placeholder=" Confirm Password"
+            />
+          </div>
+          
+          <!-- <div class="form-group text-left">
             <select id="gender" name= "gender" class="form-control-login" >
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
-          </div>
+          </div> -->
           
       </div>
 
       <div class="col-md-6 next-mobile">
-        <div class="form-group text-left">
+        <!-- <div class="form-group text-left">
+          <input type="phone" 
+              class="form-control-login" 
+              name="phonenumber" 
+              placeholder="Phone Number"
+          />
+        </div>
+         -->
+        <!-- <div class="form-group text-left">
           <input type="password" 
               class="form-control-login" 
               name="password" 
@@ -71,10 +86,10 @@
               name="confirmPassword" 
               placeholder=" Confirm Password"
           />
-        </div>
+        </div> -->
           
 
-          <div class="form-group text-left">
+          <!-- <div class="form-group text-left">
             <input type="text" 
                 class="form-control-login" 
                 name="address" 
@@ -87,10 +102,10 @@
                 class="form-control-login" 
                 name="lga" 
                 placeholder="Council Area"
-            />
+            /> -->
           </div>
 
-          <div class="form-group text-left">
+          <div class="form-group text-left" style="display: none;">
             <select id="state" name= "state" class="form-control-login">
               <option  selected value="Glasgow">Glasgow</option>
               <option value="Other">Other</option>
@@ -100,7 +115,7 @@
           </div>
       </div>
       
-      <div class="col-md-12 submit-reg-div">
+      <div class="col-md-12 submit-reg-div" style="display: none;">
         <div class="form-group text-left">
           <select id="country" name= "country" class="form-control-login" >
             <option  selected value="Scotland">Scotland</option>

@@ -65,8 +65,8 @@ class Coin(models.Model):
         return f"{self.date_added} - {self.state} - {self.month} - {self.year} - {self.allocatedCoins} - {self.backAllocatedCoins}- {self.exchangeRate}- {self.date_added_normal}"
 
 class otp(models.Model):
-    user=models.CharField(max_length=30,verbose_name="User")
-    user_phone = models.CharField(max_length=15, unique=True, null=True, verbose_name="Telephone number")
+    user=models.CharField(max_length=200,verbose_name="User")
+    # user_phone = models.CharField(max_length=200, unique=True, null=True, verbose_name="Telephone number")
     otp_code = models.IntegerField(verbose_name="OTP",blank=False)
     validated = models.BooleanField(default=False)
     date_added = models.DateTimeField(default=timezone.now)

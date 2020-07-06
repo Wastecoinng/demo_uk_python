@@ -174,18 +174,18 @@ def user_registrationapi(request):
     try:
         firstName = request.data.get('firstname',None)
         lastName = request.data.get('lastname',None)
-        phoneNumber = request.data.get('phonenumber',None)
+        # phoneNumber = request.data.get('phonenumber',None)
         email = request.data.get('email',None)
-        gender = request.data.get('gender',None)
+        # gender = request.data.get('gender',None)
         password = request.data.get('password',None)
         confirmPassword = request.data.get('confirmPassword',None)
-        address = request.data.get('address',None)
-        lga = request.data.get('lga',None)
+        # address = request.data.get('address',None)
+        # lga = request.data.get('lga',None)
         state = request.data.get('state',None)
         country = request.data.get('country',None)
-        reg_field = [firstName,lastName,phoneNumber,email,password,confirmPassword,address,lga,state,country]
+        reg_field = [firstName,lastName,email,password,confirmPassword,state,country]
         if not None in reg_field and not "" in reg_field:
-            if User.objects.filter(email =email).exists() or User.objects.filter(username=phoneNumber).exists():
+            if User.objects.filter(email =email).exists():
                 return_data = {
                     "error": "1",
                     "message": "User Exists"
@@ -196,17 +196,17 @@ def user_registrationapi(request):
                     "message": "Password is not the same"
                 }
             else:
-                request.session['phone_number'] =phoneNumber
-                user=User.objects.create_user(phoneNumber, email,password)
+                request.session['email'] =email
+                user=User.objects.create_user(email, email,password)
                 user.first_name=firstName
                 user.last_name=lastName
                 user.save()
                 #Generate OTP
                 code = string_generator.numeric(6)
                 #Save OTP
-                user_OTP =otp(user=phoneNumber,user_phone=phoneNumber,otp_code=code, validated=True)
+                user_OTP =otp(user=email,otp_code=code, validated=True)
                 user_OTP.save()
-                m = WastecoinUser(user=user, firstname=firstName, lastname=lastName, email=email,user_phone=phoneNumber, user_gender=gender, user_address=address, user_state=state, user_lga=lga, user_country=country) 
+                m = WastecoinUser(user=user, firstname=firstName, lastname=lastName, email=email, user_state=state, user_country=country) 
                 m.save()
                 n = notifications(sender="Admin", header="Welcome to WasteCoin, "+ str(user.first_name)+"!", message="Thank you for joining WasteCoin, "+ str(user.first_name)+"! Let's get the mining started already!", receiver=user) 
                 n.save()
@@ -767,7 +767,7 @@ def redeem_coins(request):
         totalCoins = Coin.objects.filter().order_by('-date_added')[0]
         amount = request.data.get('amount',None)
         user_state = request.data.get('state',None)
-        phonenumber = request.data.get('phonenumber',None)
+        phonenumber = request.data.get('email',None)
         month = request.data.get('month',None)
         incentive = request.data.get('incentive',None)
         amountExchange = float(amount)*float(totalCoins.exchangeRate)

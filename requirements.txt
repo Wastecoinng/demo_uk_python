@@ -13,4 +13,4 @@ authy==2.2.3
 python-dotenv==0.10.3
 phonenumbers==8.10.16
 twilio==6.41.0
-decouple==3.3
+python-decouple==3.3

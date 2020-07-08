@@ -12,25 +12,20 @@ from django.contrib.auth import login,logout, authenticate
 from CustomCode import string_generator,password_functions,validator,autentication
 from django.db.models import Sum,Q
 from django.core.mail import send_mail
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
 # from CustomCode import string_generator,password_functions,validator,autentication
 
 
 # Landing page
 def index(request):
-    return render(request,"home.html") 
-
-# def index(request):
-#     if request.user.is_authenticated: 
-#         agent = WastecoinAgent.objects.filter(user=request.user)
-#         user = WastecoinUser.objects.filter(user=request.user)
-#         if agent:
-#             return HttpResponseRedirect(reverse("dashboard_agent"))
-#         if user:
-#             return HttpResponseRedirect(reverse("dashboard"))
-#     else:
-#         return render(request,"home.html") 
+    if request.user.is_authenticated: 
+        agent = WastecoinAgent.objects.filter(user=request.user)
+        user = WastecoinUser.objects.filter(user=request.user)
+        if agent:
+            return HttpResponseRedirect(reverse("dashboard_agent"))
+        if user:
+            return HttpResponseRedirect(reverse("dashboard"))
+    else:
+        return render(request,"home.html") 
 
 # signup view page
 def register(request):
@@ -69,30 +64,49 @@ def registeragent(request):
 #         return render(request,"verification.html", return_data) 
 
 # User verfication
-def user_verification(request,email, token):
+@api_view(["POST"])
+def user_verification(request):
     try:
-        otp_entered = token
-        user_data = otp.objects.get(user=email)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user_data != None:
-        otpCode,date_added = str(user_data.otp_code),user_data.date_added
-        date_now = datetime.now(timezone.utc)
-        duration = float((date_now - date_added).total_seconds())
-        timeLimit = 1800.0 #30 mins interval
-        user_data.validated = True
-        user_data.save()
+        otp_entered = request.data.get("otp",None)
+        user_data = otp.objects.get(user=request.session['email'])
+        if otp_entered != None and otp_entered != "":
+            # user = authenticate(request,username=request.session['email'])
+            
+            otpCode,date_added = str(user_data.otp_code),user_data.date_added
+            date_now = datetime.now(timezone.utc)
+            duration = float((date_now - date_added).total_seconds())
+            timeLimit = 1800.0 #30 mins interval
+            if otp_entered == otpCode and duration < timeLimit:
+                #validate user
+                user_data.validated = True
+                user_data.save()
+                return_data = {
+                    "error": "0",
+                    "message":"Congratulations! Your account has been Verified."
+                }
+                return render(request,"login.html", return_data) 
+            elif otp_entered != otpCode and duration < timeLimit:
+                return_data = {
+                    "error": "1",
+                    "message": "Incorrect OTP"
+                }
+            elif otp_entered == otpCode and duration > timeLimit:
+                user_data.save()
+                return_data = {
+                    "error": "1",
+                    "message": "OTP has expired"
+                }
+        else:
+            return_data = {
+                "error": "2",
+                "message": "Invalid Parameters"+str(user_data.user)
+            }
+    except Exception as e:
         return_data = {
-            "error": "0",
-            "message":"Congratulations! Your account has been Verified.\n Now you can login your account."
+            "error": "3",
+            "message": str(e)
         }
-       
-    else:
-        return_data = {
-            "error": "0",
-            "message":"Activation link is invalid"
-        }
-    return render(request,"login.html", return_data)   
+    return render(request,"verification.html", return_data) 
 
 # resend code
 def resend_code(request):
@@ -104,35 +118,60 @@ def resend_code(request):
 
     updateOtp=otp.objects.filter(user=email).update(otp_code=newCode)
     if updateOtp:
-        current_site = get_current_site(request)
-        mail_subject ='Please Activate your Account Again'
-        message = render_to_string('email_template.html', {
-            'domain': current_site.domain,
-            'email': email,
-            'token': newCode,
-        })
-        send_mail(mail_subject,message,'info@farmdelite.com',[email],fail_silently=False)
+        send_mail(
+        'Please Activate your Account, Again!',
+        'Your verification Code is '+ str(newCode),
+        'info@farmdelite.com',
+        [email],
+        # fail_silently=False,
+        )
         return_data = {
             "error": "0",
-            "message": "Confirm your email address to complete the registration.Kindly check your SPAM messages also incase you can't find it in your inbox. Thanks",
-            }
-        return render(request,"reg_successful.html", return_data)
+            "message":"New Verification code has been sent to "+ str(email),
+        }
     else:
         return_data = {
         "error": "1",
         "message":"Sorry try again",
         }
-    return render(request,"login.html", return_data) 
+    return render(request,"verification.html", return_data) 
 
-    
+# # User login
+# @api_view(["POST"])
+# def user_loginapi(request):
+#     email_phone=request.POST["email_phone"]
+#     password=request.POST["password"]
+#     user = authenticate(request,username=email_phone, password=password)
 
+#     # newly added
+#     if user.is_superuser:
+#         return HttpResponseRedirect(reverse("dashboard_admin"))
+#     # newly added end
+#     if  user is None:
+#          return render(request,"login.html",{"message":"Sorry! User do not exist. Please Register. Thanks"})
+
+#     user_validation = otp.objects.get(user=email_phone)
+#     if  user is not None and user_validation.validated is False:
+#          return render(request,"login.html",{"message":"Your Account is not validated! Please call 070-000-000-00 for immediate assistance"})
+
+#     if user is not None and user_validation.validated is True:
+#         login(request,user)
+#         agent = WastecoinAgent.objects.filter(user=request.user)
+#         user = WastecoinUser.objects.filter(user=request.user)
+#         if agent:
+#             return HttpResponseRedirect(reverse("dashboard_agent"))
+
+#         if user:
+#             return HttpResponseRedirect(reverse("dashboard"))
+#     else:
+#         return render(request,"login.html",{"message":"Invalid credentials"})
 
 # User login
 @api_view(["POST"])
 def user_loginapi(request):
-    email=request.POST["email_phone"]
+    email_phone=request.POST["email_phone"]
     password=request.POST["password"]
-    user = authenticate(request,username=email, password=password)
+    user = authenticate(request,username=email_phone, password=password)
 
     if  user is None:
          return render(request,"login.html",{"message":"Sorry! User do not exist. Please Register. Thanks"})
@@ -144,7 +183,7 @@ def user_loginapi(request):
 
     user_validation = otp.objects.get(user=user)
     if  user is not None and user_validation.validated is False:
-         return render(request,"reg_unsuccessful.html",{"message":"Your Account is not validated! Please Click the link below to get new activation link"})
+         return render(request,"verification.html",{"message":"Your Account is not validated! Please call 070-000-000-00 for immediate assistance"})
 
     
 
@@ -207,20 +246,23 @@ def user_registrationapi(request):
                 m.save()
                 n = notifications(sender="Admin", header="Welcome to WasteCoin, "+ str(user.first_name)+"!", message="Thank you for joining WasteCoin, "+ str(user.first_name)+"! Let's get the mining started already!", receiver=user) 
                 n.save()
-                current_site = get_current_site(request)
-                mail_subject = str(user.first_name)+'! Please Activate your Account'
-                message = render_to_string('email_template.html', {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'email': email,
-                    'token': code,
-                })
-                send_mail(mail_subject,message,'info@farmdelite.com',[email],fail_silently=False)
+                send_mail(
+                    str(user.first_name)+'! Please Activate your Account',
+                    'Your verification Code is '+ str(code),
+                    'info@farmdelite.com',
+                    [email],
+                    fail_silently=False,
+                )
+                # verification.messages.create(
+                #     from_=twilio_number, 
+                #     to="+234"+phoneNumber,
+                #     body='You verification code is: '+ code                
+                #     )
                 return_data = {
                     "error": "0",
-                    "message": "Confirm your email address to complete the registration.Kindly check your SPAM messages also incase you can't find it in your inbox. Thanks",
+                    "message":"The registration was successful.",
                     }
-                return render(request,"reg_successful.html", return_data) 
+                return render(request,"verification.html", return_data) 
         else:
             return_data = {
                 "error":"2",
@@ -231,7 +273,7 @@ def user_registrationapi(request):
             "error": "3",
             "message": str(e)
         }
-    return render(request,"register.html", return_data) 
+    return render(request,"login.html", return_data) 
 
 # agent registration api
 @api_view(["POST"])

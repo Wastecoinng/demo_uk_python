@@ -1,0 +1,243 @@
+{% extends "layout_landing.html" %}
+{% block body%}
+{% load static %}
+<div class="landing_page">
+  <!-- top-head section -->
+  {% if error == "0" %}
+    <div class='text-center alert alert-info' id="message_div">{{message}}</div>
+  {% else %}
+    <div class='text-center text-danger' id="message_div">{{message}} </div>
+  {% endif %}
+  
+   <section class="row section_styling">
+     <div class="col-xs-12 col-xl-5 landing_page__create_account">
+       <div class="mobile-logo-div mb-5"><img src="{% static 'waste_coin_logo.svg' %}" class="logo mobile-logo" alt="logo" /></div>
+       <div class="desktop">
+        <h1>Join the Waste Revolution</h1>
+        <h3>At Wastecoin, we believe proper waste <br /> 
+        collection, disposal is possible and <br/>
+      <span>EVERYONE'S RESPONSIBILITY</span>
+        </h3>
+    </div>
+       <a href="{% url 'register' %}" class="btn btn-block d-none d-sm-block landing_page__create_account__btn">Create Account</a>
+     </div>
+     <div class="d-none col-xlg-7 d-xl-block landing_page__waste">
+       <img src="{% static 'top_image_landing.svg' %}" alt="top_image_img" />
+     </div>
+     
+     <div class="d-block d-sm-none landing_page__create_account__mobile">
+      <div class="mobile">
+        <h1 >Hey there!</h1>
+        <h3 >Get rewards for disposing waste <br/>Properly</h3>
+        <br/><br/><h3>Join us, its Free</h3>
+      </div> 
+       <a href="{% url 'login' %}"><button class="btn btn-primary">Sign in <span><img src="{% static 'arrow_forward.svg' %}" alt="arrow_forward" /></span></button></a>
+       <a href="{% url 'register' %}"><p>Create an account</p></a>
+     </div>
+     
+   </section>
+   <!-- get rewarded section -->
+   <!-- <section class="row d-none d-sm-flex landing_page__get_rewarded"> -->
+    <section class="row landing_page__get_rewarded">
+    <div class="row get_rewarded">
+      <div class="d-none col-xlg-7 d-xl-block images-left left_side">
+      <img src="{% static 'get_rewarded.svg' %}" alt="get_rewarded_img" />
+      </div>
+      <div class="d-none col-xlg-5 d-xl-block words right_side_up">
+        <h1>Get Rewarded for it</h1>
+        <h3> We also believe Everyone should be <span>REWARDED</span><br/> 
+            for such good waste disposal habit.</h3>
+      </div>
+    </div>
+  </section>
+  <!-- why section -->
+  <!-- <section class="row d-none d-sm-flex landing_page__get_rewarded"> -->
+    <section class="row landing_page__get_rewarded">
+    <div class="row get_rewarded">
+      <div class="d-none col-xlg-5 d-xl-block words right_side">
+        <h1>Why?</h1>
+        <h3> It is <span>NOT</span> about the <span>REWARD</span><br/> 
+            It is about the <span>APPRECIATION</span></h3>
+      </div>
+      <div class="d-none col-xlg-7 d-xl-block images_right left_side">
+      <img src="{% static 'why01.svg' %}" alt="why01_img" />
+      </div>
+    </div>
+  </section>
+  <!-- why section two -->
+  <!-- <section class="row d-none d-sm-flex landing_page__get_rewarded"> -->
+    <section class="row landing_page__get_rewarded">
+    <div class="row get_rewarded">
+      <div class="d-none col-xlg-5 d-xl-block words left_side">
+        <img src="{% static 'why02.svg' %}" alt="why02_img" />
+      </div>
+      <div class="d-none col-xlg-7 d-xl-block words right_side_special">
+        <h3> It is <span>NOT</span> about <span>NOW</span><br/> 
+              It is  about the <span>FUTURE</span><br/> 
+                It is about preserving the <span>ECOSYSTEM</span></h3>
+      </div>
+    </div>
+  </section>
+  <!-- how it works section  -->
+  <!-- <section class="row section_styling_how d-none d-sm-flex" id="how_it_works"> -->
+  <section class="row section_styling_how " id="how_it_works">
+  <div class="how"><h1 class="h1">How it works?</h1></div>
+    <div class="cont_how">
+      <div class="row signup">
+        <div class="col-xlg-5 d-xl-block word_left">
+          <h1 class="h1">Sign up</h1>
+          <h3 class="h3"> <span class="span">CREATE</span> a Wastecoin account with ease<br/> 
+              <span class="span">ENSURE</span> you provide accurate and correct data <br/>to avoid future payment issues</h3>
+        </div>
+        <div class=" col-xlg-7 d-xl-block image_right">
+        <img src="{% static 'signup.svg' %}" alt="signup_img" />
+        </div>
+      </div>
+      <div class="row signin">
+        <div class=" col-xlg-7 d-xl-block image_right">
+        <img src="{% static 'signin.svg' %}" alt="signin_img" />
+        </div>
+        <div class="col-xlg-5 d-xl-block word_right">
+          <h1 class="h1">Sign in</h1>
+          <h3 class="h3"> Sign in with your <span class="span">PHONE NUMBER</span> and<br/> 
+              password details</h3>
+        </div>
+      </div>
+      <div class="row collect_waste">
+        <div class=" col-xlg-5 d-xl-block word_left">
+          <h1 class="h1">Collect Waste</h1>
+          <h3 class="h3">Consciously mine waste (collect and gather)<br/>your
+              <span class="span"> PET bottles and cartons</span> used in your home, 
+              <br/>at work or where ever you are,
+              in your spare time</h3>
+        </div>
+        <div class="col-xlg-7 d-xl-block image_right">
+        <img src="{% static 'collect.svg' %}" alt="collect_img" />
+        </div>
+      </div>
+      <div class="row deliver">
+        <div class="d-none col-xlg-7 d-xl-block image_right">
+        <img src="{% static 'deliver.svg' %}" alt="deliver_img" />
+        </div>
+        <div class=" col-xlg-5 d-xl-block word_left">
+          <h1 class="h1">Deliever to a Wastecoin Agent</h1>
+          <h3 class="h3"> Our Agents are around you. Deliever to them<br/> 
+              You can go to them or they can come to you</h3>
+        </div>
+      </div>
+      <div class="row paid">
+        <div class=" col-xlg-5 d-xl-block word_left">
+          <h1 class="h1">Get paid in Wastecoin</h1>
+          <h3 class="h3">Our agents weights the Waste you deliever and<br/>
+              pay you the equivalent amount in Wastecoin.
+              <br/>This is paid into your Wastecoin wallet</h3>
+        </div>
+        <div class=" col-xlg-7 d-xl-block image_right">
+        <img src="{% static 'paid.svg' %}" alt="paid_img" />
+        </div>
+      </div>
+      <div class="row redeem">
+        <div class=" col-xlg-7 d-xl-block image_right">
+        <img src="{% static 'waste_coin_wallet.svg' %}" alt="redeem_img" />
+        </div>
+        <div class="col-xlg-5 d-xl-block word_left">
+          <h1 class="h1">Accumulate/Redeem Wastecoins</h1>
+          <h3 class="h3"> On getting paid, you can choose to <br/> 
+              accumulate it and let your wastecoin grow significantly
+              <br/> as you would keep your money in a bank.<br/>
+              OR
+              <br/> Redeem the Wastecoins in exchange for rewards such as 
+              <br/> Cash, Data subscription, Recharge cards amongst other incentives</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- contact us -->
+  <section class="row d-none d-sm-flex contact d-none">
+  <!-- <section class="row contact"> -->
+  <div class="how" id="contact_us">
+    <h1 class="h1">Contact us</h1>
+    <h3 class="h3">Tell us how we can be of assistance and we'll get in touch shortly </h3>
+  </div>
+    <form class="form-control reg-form contact_form" action="{% url 'contactus' %}" method="POST">
+      {% csrf_token %}
+        <div class="row">
+          <div class="contact_form_container">
+          <h3 class="h3">Full Name</h3>
+            <div class="form-group text-left">
+              <input type="text"
+                class="form-control-contact"
+                id="fullName"
+                name="fullName"
+              />
+
+            </div>
+          </div>
+        </div>
+        <div class="row left-padding">
+          <div class="contact_form_container_half pull-left">
+            <div >
+              <h3 class="h3">Email</h3>
+              <div class="form-group text-left">
+                <input type="email"
+                  class="form-control-contact"
+                  id="email"
+                  name="email"
+                />
+
+              </div>
+            </div>
+            
+          </div>
+          <div class="contact_form_container_half pull-right">
+            <div >
+              <h3 class="h3">Phone Number (Optional)</h3>
+              <div class="form-group text-left">
+                <input type="number"
+                  class="form-control-contact"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                />
+
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="row">
+          <div class="contact_form_container">
+          <h3 class="h3">Message</h3>
+            <div class="form-group text-left">
+              <textarea type="text" class="form-control-contact-text" id="message" name="message"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 submit-contact-div">
+        <button type="submit" class="contact-submit" >
+          Send Message
+          </button>
+      </div>
+    </form>
+
+  </section>
+  <section class="row d-none d-sm-flex partners d-none">
+  <!-- <section class="row partners"> -->
+    <div class="how"><h1 class="h1">Our Partners</h1></div>
+    <div class="row partner_column">
+          <div class="col-md-3">
+            <img src="{% static 'facebook.svg' %}" alt="facebook_img" />
+          </div>
+          <div class="col-md-3">
+            <img src="{% static 'goinggreen.svg' %}"alt="goinggreen_img" />
+          </div>
+          <div class="col-md-3">
+            <img src="{% static 'andela.svg' %}" alt="andela_img" />
+          </div>
+          <div class="col-md-3">
+            <img src="{% static 'waste_point.svg' %}" alt="wastepoint_img" />
+          </div>
+        </div>
+  </section>
+   
+ </div>
+{% endblock %}

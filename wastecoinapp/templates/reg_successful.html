@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body%}
+{% load static %}
+<div class="login-card">
+  <div class="reg-header text-center"> 
+    <a href="{% url 'home' %}" style="color: #fff;">
+      <img src="{% static 'left_chevron.svg' %}" class="back-button mobile-logo float-left" alt="logo" />
+      </a>
+    Wallet Verification</div>
+  <div class="mobile-logo-div" style="margin:auto; width:50%;">
+    <img src="{% static 'waste_coin_logo.svg' %}" class="logo mobile-logo" alt="logo" />
+  </div>
+  {% if error == "0" %}
+    <div class='text-center alert alert-info mt-5' id="message_di" >{{message}}.</div>
+  {% else %}
+    <div class='text-center text-danger mt-5' id="message_di">{{message}}</div>
+  {% endif %}
+  
+      
+
+</div>
+{% endblock %}
+
+

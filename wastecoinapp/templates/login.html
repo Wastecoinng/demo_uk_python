@@ -11,7 +11,7 @@
   {% if error == "0" %}
     <div class='text-center alert alert-info' id="message_div">{{message}} </div>
   {% else %}
-    <div class='text-center text-danger' id="message_div">{{message}}</div>
+    <div class='text-center text-danger' id="message_di">{{message}}</div>
   {% endif %}
   <form class="form-control reg-form btn_width" action="{% url 'loginapi' %}" method="POST" style="margin-top: 50px;">
     {% csrf_token %}

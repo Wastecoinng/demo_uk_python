@@ -15,7 +15,9 @@ from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 # from CustomCode import string_generator,password_functions,validator,autentication
-
+import cv2
+import numpy as np
+from pyzbar.pyzbar import decode
 
 # Landing page
 def index(request):
@@ -114,7 +116,7 @@ def resend_code(request):
         send_mail(mail_subject,message,'info@farmdelite.com',[email],fail_silently=False)
         return_data = {
             "error": "0",
-            "message": "Confirm your email address to complete the registration.Kindly check your SPAM messages also incase you can't find it in your inbox. Thanks",
+            "message": "An Activation Link has been sent to your Email. Kindly check your Inbox or Spam. Thanks",
             }
         return render(request,"reg_successful.html", return_data)
     else:
@@ -143,6 +145,7 @@ def user_loginapi(request):
     # newly added end
 
     user_validation = otp.objects.get(user=user)
+    request.session['email'] =email
     if  user is not None and user_validation.validated is False:
          return render(request,"reg_unsuccessful.html",{"message":"Your Account is not validated! Please Click the link below to get new activation link"})
 
@@ -273,7 +276,7 @@ def agent_registrationapi(request):
                 #Generate OTP
                 code = string_generator.numeric(6)
                 #Save OTP
-                user_OTP =otp(user=agentid,user_phone=phoneNumber,otp_code=code, validated=True)
+                user_OTP =otp(user=agentid,otp_code=code, validated=True)
                 user_OTP.save()
                 return_data = {
                     "error": "0",
@@ -446,6 +449,47 @@ def notification(request):
     if agent:
         return render(request,"notification_agent.html", return_data) 
     return render(request,"notification.html", return_data) 
+
+# scanner view page
+def scanner_camera(request):
+    cap = cv2.VideoCapture(0)
+    cap.set(3,300)
+    cap.set(4,200)
+
+    while True:
+        success,img = cap.read()
+        for barcode in decode(img):
+            myData = barcode.data.decode('utf-8')
+            print(myData) 
+            pts = np.array([barcode.polygon], np.int32)
+            pts = pts.reshape((-1,1,2))
+            cv2.polylines(img,[pts], True (255,0,255), 5)
+        cv2.imshow('Result', img)
+        cv2.waitKey(1)
+  
+
+# scanner view page
+def scanner(request):
+    updateReadMessage=notifications.objects.filter(receiver=request.user).update(beenRead= "Yes")
+    notification_list = notifications.objects.filter(receiver=request.user)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(notification_list, 5)
+    try:
+        notificationss = paginator.page(page)
+    except PageNotAnInteger:
+        notificationss = paginator.page(1)
+    except EmptyPage:
+        notificationss = paginator.page(paginator.num_pages)
+    agent = WastecoinAgent.objects.filter(user=request.user)
+    user = WastecoinUser.objects.filter(user=request.user)
+    return_data = {
+        "user":request.user,
+        "error": "0",
+        "notification": notificationss,
+        "userman": WastecoinUser.objects.filter(user=request.user)
+        }
+    return render(request,"scanner.html", return_data) 
+
 
 # contact us api
 @api_view(["POST"])

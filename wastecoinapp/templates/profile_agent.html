@@ -30,13 +30,8 @@
     <div class="sidenav-ul-mobile">
         <div class="menu-box">
             <a href="{% url 'notification' %}">
-                <img src="{% static 'notification-white.svg' %}" class="logo" alt="Notification-logo" />
-                {% if unreadMsg == 0 %}
-                <div class="sidenav-inner-div">Notification</div>
-                {% else %}
-                <span class="badge badge-danger" style="margin-left:-22px">{{unreadMsg}}</span>
-                <div class="sidenav-inner-div">Notification</div>
-                {% endif %}
+                <img src="{% static 'scanner_white.svg' %}" class="logo" alt="Notification-logo" />
+                <div class="sidenav-inner-div">Scanner</div>
             </a>
         </div>
         <div class="menu-box">
@@ -322,30 +317,6 @@
                         <h5 style="float:left; color:#3A3B3F;">Account Details</h5>
                         <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#agentAccountModal"/>
                     </div>
-                    <div class="row" style="border-top:1px solid #ccc;">
-                        <div style="float: left; padding-right:30px;width:100px; font-size:0.6rem;">Account Name</div>
-                        <div style="float: right; font-weight: 600;font-size:0.5rem;">{{item.accountname}}</div>
-                    </div>
-                    <div class="row">
-                        <div style="float: left;padding-right:30px;width:100px; font-size:0.6rem;">Account Number</div>
-                        <div style="float: right; font-weight: 600;font-size:0.5rem;">{{item.accountnumber}}</div>
-                    </div>
-                    <div class="row">
-                        <div style="float: left;width:100px;padding-right: 30px; font-size:0.6rem;">Bank Name</div>
-                        <div style="float: right; font-weight: 600;font-size:0.6rem;">{{item.bank}}</div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-        <!-- security -->
-        <div class="col-12">
-            <div class="card" style="width:100%;" >
-                <div class="card-body " style="padding: 1.5rem 1rem!important; border:2px solid #f3eeee; box-sizing: border-box; ">
-                    <div style=" margin-bottom:40px;">
-                        <h5 style="float:left; color:#3A3B3F;">Security</h5>
-                        <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#agentPasswordModal"/>
-                    </div>
                     {% if item.accountname %}
                     <div class="row" style="border-top:1px solid #ccc;">
                         <div style="float: left;width:100px;padding-right: 30px; font-size:0.6rem;">Account Name</div>
@@ -365,6 +336,26 @@
                     </div>
                     
                     {% endif %}
+                </div>
+            </div>
+            
+        </div>
+        <!-- security -->
+        <div class="col-12">
+            <div class="card" style="width:100%;" >
+                <div class="card-body " style="padding: 1.5rem 1rem!important; border:2px solid #f3eeee; box-sizing: border-box; ">
+                    <div style=" margin-bottom:40px;">
+                        <h5 style="float:left; color:#3A3B3F;">Security</h5>
+                        <img src="{% static 'edit.svg' %}" class="logo" alt="edit-logo" style="float: right;" data-toggle="modal" data-target="#agentPasswordModal"/>
+                    </div>
+                    <div class="row" style="border-top:1px solid #ccc;">
+                        <div style="float: left; padding-right:30px;width:100px; font-size:0.6rem;">Old Password</div>
+                        <div style="float: right; font-weight: 600;font-size:0.8rem;">******</div>
+                    </div>
+                    <div class="row">
+                        <div style="float: left;padding-right:30px;width:100px; font-size:0.6rem;">New Password</div>
+                        <div style="float: right; font-weight: 600;font-size:0.8rem;">******</div>
+                    </div>
             </div>
         </div>
     </div>

@@ -450,27 +450,45 @@ def notification(request):
         return render(request,"notification_agent.html", return_data) 
     return render(request,"notification.html", return_data) 
 
-# scanner view page
+
+     
+# scanner api
+@api_view(["POST"])
 def scanner_camera(request):
-    cap = cv2.VideoCapture(0)
-    cap.set(3,300)
-    cap.set(4,200)
+    updateReadMessage=notifications.objects.filter(receiver=request.user).update(beenRead= "Yes")
+    notification_list = notifications.objects.filter(receiver=request.user)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(notification_list, 5)
+    try:
+        notificationss = paginator.page(page)
+    except PageNotAnInteger:
+        notificationss = paginator.page(1)
+    except EmptyPage:
+        notificationss = paginator.page(paginator.num_pages)
+    agent = WastecoinAgent.objects.filter(user=request.user)
+    user = WastecoinUser.objects.filter(user=request.user)
 
-    while True:
-        success,img = cap.read()
-        # barcode = decode(img)
-        # myData = barcode.data.decode('utf-8')
-        # print(myData) 
-        # pts = np.array([barcode.polygon], np.int32)
-        # pts = pts.reshape((-1,1,2))
-        # cv2.polylines(img,[pts], True, (255,0,255), 5)
-        cv2.imshow('Result', img)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+    # img=request.POST["image"]
+    # img= request.data.get('image',None)
+    readImg = cv2.imread('barcode.png')
+    # readImg = cv2.imread('barcode.png')
+    barcode = decode(readImg)
+    item_list = []
+    for item in barcode:
+        item_list.append(item[0])
+    
+    # myData = barcode.data.decode('utf-8')
 
-    captureDevice.release()
-    cv2.destroyAllWindows()
-        # cv2.waitKey(1)
+    return_data = {
+        "user":request.user,
+        "error": "0",
+        "notification": notificationss,
+        "userman": WastecoinUser.objects.filter(user=request.user),
+        "scanResult": item_list,
+        # "scanResult1": img
+        }
+    return render(request,"scanner_result.html", return_data) 
+
   
 
 # scanner view page

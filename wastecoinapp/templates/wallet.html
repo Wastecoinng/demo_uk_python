@@ -74,7 +74,7 @@
                   <div class="left">
                     <h5 class="card-title" style="font-size:12px;font-weight: bold;">ACCOUNT OVERVIEW</h5>
                     <div style="display: flex;">
-                        <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div>
+                        <div style="float: left;"><img class="img-fluid" style="width:30px;"src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div>
                         {% for item in userman %}
                         <div style="float: right;"><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.9rem;">{{item.currentUserWastecoinBalance}}  </h2>
                         {% endfor %}
@@ -107,7 +107,7 @@
                     <div style="width:130px; float: left;">
                         <!-- <div style="float: left;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /></div> -->
                         {% for item in userman %}
-                        <div ><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.0rem;"><img src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{item.currentUserWastecoinBalance}} </h2></div>
+                        <div ><h2 class="card-subtitle mb-2 text-muted" style="color: #CAD9EE!important;font-size: 1.0rem;"><img class="img-fluid" style="width:25px;" src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{item.currentUserWastecoinBalance}} </h2></div>
                         {% endfor %}
                     </div>
                     <div style="width:120px; float: right; text-align: center; margin-top:-35px;">
@@ -166,7 +166,7 @@
                     {% for t in transaction %}
                         <tr>
                             <th scope="row">{{t.date_added_normal}}</th>
-                            <td><img src="{% static 'wastecoin-currency-smaller.svg' %}" class="logo" alt="allocation-logo" /> {{t.amount}}</td>
+                            <td><img  style="width:20px;" src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> {{t.amount}}</td>
                             <td>{{t.recipient}}</td>
                             <td>{{t.sender}}</td>
                             <!-- <td>{{t.transaction_type}}</td> -->

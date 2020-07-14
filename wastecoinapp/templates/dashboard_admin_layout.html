@@ -22,7 +22,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.min.js" integrity="sha256-z0oKYg6xiLq3yJGsp/LsY9XykbweQlHl42jHv2XTBz4=" crossorigin="anonymous"></script>
 
     <!-- bootstrap -->
-    <link rel="shortcut icon" type="image/png" href="{% static 'waste_coin.ico' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'wastecoin_logo.ico' %}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script> 
@@ -420,7 +420,7 @@
 <body>
   <div>
     <nav class="navbar navbar-expand-lg appheader">
-    <a class="navbar-brand"><img src="{% static 'waste_coin_logo.svg' %}" class="logo" alt="logo" /></a> 
+      <a class="navbar-brand" href="{% url 'home' %}" style="width: 50px;"><img class="img-fluid" src="{% static 'wastecoin_logo.png' %}" class="logo" alt="logo" /></a>
      
     <h4 class="card-text pull-right" style="color: #1773A6; float: right; margin-left:70%">
     {% for item in userman %}
@@ -632,7 +632,7 @@
                         </div>
                         {% endfor %}
                     </div>  -->
-                    Please Contact the Wastecoin technical team to change your password. Thanks
+                    Please Contact the WasteCoin technical team to change your password. Thanks
               </div>
               <!-- <div class="modal-footer">
                 <button type="submit" class="reg-submit" >Update</button>

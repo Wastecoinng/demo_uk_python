@@ -451,7 +451,6 @@ def notification(request):
     return render(request,"notification.html", return_data) 
 
 # scanner view page
-@api_view(["POST"])
 def scanner_camera(request):
     cap = cv2.VideoCapture(0)
     cap.set(3,300)

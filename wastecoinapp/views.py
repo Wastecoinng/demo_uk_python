@@ -458,14 +458,19 @@ def scanner_camera(request):
 
     while True:
         success,img = cap.read()
-        barcode = decode(img)
-        myData = barcode.data.decode('utf-8')
-        print(myData) 
-        pts = np.array([barcode.polygon], np.int32)
-        pts = pts.reshape((-1,1,2))
-        cv2.polylines(img,[pts], True, (255,0,255), 5)
+        # barcode = decode(img)
+        # myData = barcode.data.decode('utf-8')
+        # print(myData) 
+        # pts = np.array([barcode.polygon], np.int32)
+        # pts = pts.reshape((-1,1,2))
+        # cv2.polylines(img,[pts], True, (255,0,255), 5)
         cv2.imshow('Result', img)
-        cv2.waitKey(1)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    captureDevice.release()
+    cv2.destroyAllWindows()
+        # cv2.waitKey(1)
   
 
 # scanner view page

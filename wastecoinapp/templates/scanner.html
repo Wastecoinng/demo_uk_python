@@ -131,7 +131,7 @@
     const constraints = {
     audio:true,
     video:{
-    width:1280,height:720
+    width:250,height:200
     }};
     async function init()
     {
@@ -153,8 +153,34 @@
     }
     init();
     var context = canvas.getContext('2d');
-    snap.addEventListener("click",function(){
-    context.drawImage(video, 0, 0, 640, 480);});
+    // setTimeout(
+    //     function(){ alert("Hello"); }, 
+    // 3000);
+    // snap.addEventListener("click",
+    //     function(){
+    //     context.drawImage(video, 0, 0, 100, 100);
+    //     }
+    // );
+    snap.addEventListener("click",
+        function(){
+            $('body').append('<div style="" id="loadingDiv"><div class="loader">Checking...</div></div>');
+            context.drawImage(video, 0, 0, 100, 100);
+            $(window).on('load', function(){
+            setTimeout(removeLoader, 450000); //wait for page load PLUS two seconds.
+            });
+        }
+    );
+
+//     $('body').append('<div style="" id="loadingDiv"><div class="loader">Loading...</div></div>');
+// $(window).on('load', function(){
+//   setTimeout(removeLoader, 2000); //wait for page load PLUS two seconds.
+// });
+        function removeLoader(){
+            $( "#loadingDiv" ).fadeOut(450000, function() {
+            // fadeOut complete. Remove the loading div
+            $( "#loadingDiv" ).remove(); //makes page more lightweight 
+        });  
+        }
     </script>
 
 {% endblock %}

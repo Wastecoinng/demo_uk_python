@@ -328,6 +328,31 @@ def dashboard(request):
         }
     return render(request,"dashboard_home.html", return_data) 
 
+# marketplace view page
+def marketplace(request):
+    unreadMessages = notifications.objects.filter(receiver=request.user, beenRead ="No").order_by('-date_added').count()
+    userState = WastecoinUser.objects.get(user=request.user).user_state
+    totalCoins = Coin.objects.filter(state=userState).order_by('-date_added')[0]
+    # totalCoins = Coin.objects.filter().order_by('-date_added')[0]
+    minedCoins = minedCoin.objects.aggregate(Sum('minedCoin'))
+    miner_list = WastecoinUser.objects.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(miner_list, 4)
+    try:
+        miners = paginator.page(page)
+    except PageNotAnInteger:
+        miners = paginator.page(1)
+    except EmptyPage:
+        miners = paginator.page(paginator.num_pages)
+    return_data = {
+        "user":request.user,
+        "unreadMsg": unreadMessages,
+        "allocatedWasteCoins": totalCoins,
+        "minedCoins": minedCoins,
+        "userman": WastecoinUser.objects.filter(user=request.user),
+        "miner": miners,
+        }
+    return render(request,"marketplace/index.html", return_data) 
 
 # dashboard view page
 def dashboard_agent(request):

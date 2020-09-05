@@ -1,0 +1,256 @@
+html, body{
+	margin:0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	font-family: 'Montserrat', sans-serif;
+}
+div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, .row, .col-md-4, .col-md-3, .col-md-1, .col-md-6, .col-md-7, .col-md-9 {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+a{
+	color: #000;
+}
+
+a:hover{
+	color: #000;
+	text-decoration:none;
+}
+
+@media (max-width: 100%){
+	.container{
+		max-width: 100%;
+		width: 100%
+	}
+}
+
+.container{
+	padding:2% 5% 0 5%;
+	margin:0px;
+	width: 100%;
+	height:100vh;
+	background-color:#fff;
+
+}
+/* HEADER CSS */
+.header{
+	height: 10vh;
+	width: 100%;
+	padding-top: 20px;
+}
+.head-left{
+	height:5vh;
+	font-size: 14px;
+}
+.fa-th{
+	font-size: 20px;
+}
+.head-center{
+	height:5vh;
+	text-align: center;
+}
+.glyphicon-map-marker{
+	font-size: 15px;
+	color: #fff;
+}
+.map{
+	background-color:#232323;
+	width:25px;
+	height: 25px;
+	margin-left: 15px;
+	padding-top: 4px;
+	text-align: center;
+	float: left;
+	
+}
+.store{
+
+	width:auto;
+	height: 70px;
+	padding-top: 5px;
+	font-size:11px;
+	
+}
+.head-right{
+	height:5vh;
+	text-align: right;
+	padding-left: 20px;
+}
+/* BODY CSS */
+.body{
+	padding: 0 5% 0 5%;
+	height: 60vh;
+}
+.one{
+	height: 60vh;
+	background-color: blue;
+}
+.two{
+	height: 60vh;
+	background-color: red;
+}
+.three{
+	height: 60vh;
+	background-color: black;
+}
+.four{
+	height: 60vh;
+	background-color: orange;
+}
+/* FOOTER CSS */
+.social{
+	height: 8vh;
+	/* background-color: purple; */
+	padding-top:3vh;
+}
+.video{
+	height: 12vh;
+	/* background-color: brown; */
+	padding-top:20px;
+}
+.others{
+	/* height: 8vh;
+	background-color: cyan; */
+	font-size: 14px;
+}
+.video-inner{
+	height: 10vh;
+	width:585px;
+	border-radius:10px;
+	background-color: #F1F3F4;
+}
+
+.icon{
+	background-color:#4A4A4A;
+	width:40px;
+	height: 40px;
+	margin-left: 15px;
+	padding-top: 9px;
+	text-align: center;
+	
+}
+.fam{
+	font-size: 20px;
+	color: #fff;
+}
+.bum{
+	padding: 0 10px 0 20px;
+	font-size:12px;
+}
+
+
+/* overlay index */
+/* overlay */
+.middle-index {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+	text-align: center;
+	font-family: 'Montserrat', sans-serif;
+	font-size: 18px;
+	line-height: 22px;
+  }
+  
+  .slide:hover .lass {
+    opacity: 0.9;
+  }
+  
+  .slide:hover .middle-index {
+    opacity: 1;
+  }
+
+  #overlay {
+    position: fixed;
+    display: none;
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    z-index: 2;
+	cursor: pointer;
+	-webkit-animation: left2right 2s; /* Safari 4.0 - 8.0 */
+    animation: left2right 0.1s ;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes left2right {
+    0%   {background-color: rgba(255, 255, 255, 1); width: 0px;}
+    25%  {background-color: rgba(255, 255, 255, 1); width: 25%; }
+    50%  {background-color: rgba(255, 255, 255, 1); width: 50%;}
+    75%  {background-color: rgba(0255, 255, 255, 1); width: 75%;}
+    100% {background-color: rgba(255, 255, 255, 1); width: 100%;}
+}
+
+@keyframes left2right {
+	0%   {background-color: rgba(255, 255, 255, 1); width: 0px;}
+    25%  {background-color: rgba(255, 255, 255, 1); width: 25%; }
+    50%  {background-color: rgba(255, 255, 255, 1); width: 50%;}
+    75%  {background-color: rgba(0255, 255, 255, 1); width: 75%;}
+    100% {background-color: rgba(255, 255, 255, 1); width: 100%;}
+}
+.index{
+	-webkit-animation: left2right 2s; /* Safari 4.0 - 8.0 */
+    animation: left2right 0.1s ;
+}
+@keyframes right2left {
+	0%   {background-color: rgba(255, 255, 255, 1); width: 100%;}
+    25%  {background-color: rgba(255, 255, 255, 1); width: 75%; }
+    50%  {background-color: rgba(255, 255, 255, 1); width: 50%;}
+    75%  {background-color: rgba(0255, 255, 255, 1); width: 25%;}
+    100% {background-color: rgba(255, 255, 255, 1); width: 0%;}
+}
+
+
+/* RESPONSIVEEVEINES */
+@media (max-width: 767px){
+	body{
+		overflow-y:auto;
+	}
+	.rmt{
+		margin-top:2%;
+		margin-bottom: 5px;
+	}
+	.rm{
+		margin-bottom: 5px;
+	}
+	.bum{
+		padding: 0 ;
+	}
+	.video-inner{
+		height: 10vh;
+		width:auto;
+		border-radius:10px;
+		background-color: #F1F3F4;
+	}
+	.container-audio {
+		width: 100%;
+		height: 60%;
+	}
+	
+}

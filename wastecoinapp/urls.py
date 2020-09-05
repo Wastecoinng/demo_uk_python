@@ -39,6 +39,8 @@ urlpatterns = [
     path("verification/<email>/<int:token>/", views.user_verification, name="verification"),
     path("update_account", views.update_account, name="update_account"),
     path("update_agent_account", views.update_agent_account, name="update_agent_account"),
+
+    path("marketplace", views.marketplace, name="marketplace"),
     
 ]
 

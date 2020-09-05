@@ -1,0 +1,194 @@
+{% extends "dashboard_layout.html" %}
+{% block body%}
+{% load static %}
+<div class="row">
+  <nav class="sidenav">
+    
+    <ul class="navbar-nav mr-auto sidenav-ul">
+        <li class="nav-item sidenav-li" >
+            <a class="nav-link" href="{% url 'dashboard' %}"><img src="{% static 'home.svg' %}" class="logo" alt="Home-logo" /><span class="sidenav-span">&nbsp;Home</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link" href="{% url 'profile' %}"><img src="{% static 'profile.svg' %}" class="logo" alt="Profile-logo" /> <span class="sidenav-span">Profile</span></a>
+        </li>
+        <li class="nav-item sidenav-li" >
+        <a class="nav-link " href="{% url 'wallet' %}"><img src="{% static 'wallet.svg' %}" class="logo" alt="Wallet-logo" /><span class="sidenav-span">&nbsp;Wallet</span></a>
+        </li>
+        <li class="nav-item sidenav-li" style="background-color: #2ad2be50;border-radius:5px; padding:1% 5%;">
+        <a class="nav-link" href="{% url 'notification' %}"><img src="{% static 'notification.svg' %}"class="logo" alt="Notification-logo" /> <span class="sidenav-span">Notification</span></a>
+        </li>
+        <li class="nav-item sidenav-li">
+        <a class="nav-link " href="{% url 'signout' %}"><img src="{% static 'logout.svg' %}" class="logo" alt="Logout-logo" /><span class="sidenav-span">&nbsp;Logout</span></a>
+        </li>
+    </ul>
+    <div class="sidenav-ul-mobile">
+        <div class="menu-box">
+            <a href="{% url 'scanner' %}">
+                <img src="{% static 'scanner_green.svg' %}" class="logo" alt="Notification-logo" />
+                <div class="sidenav-inner-div">Scanner</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'wallet' %}" >
+                <img src="{% static 'wallet-white.svg' %}" class="logo" alt="Wallet-logo" />
+                <div class="sidenav-inner-div">Wallet</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'dashboard' %}">
+                <img src="{% static 'home-white.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Home</div>
+            </a>
+        </div>
+        <div class="menu-box">
+            <a href="{% url 'profile' %}">
+                <img src="{% static 'profile-white.svg' %}" class="logo" alt="Profile-logo" />
+                <div class="sidenav-inner-div">Profile</div>
+            </a>
+        </div>
+        <div class="menu-box" >
+            <a href="{% url 'signout' %}">
+                <img src="{% static 'logout-white.svg' %}" class="logo" alt="Logout-logo" />
+                <div class="sidenav-inner-div">Logout</div>
+            </a>
+        </div>
+    </div>
+  </nav>
+  <div class="dashboard-inner" style="float:right">
+    <div class="row dashboard-home-inner">
+        {% if notification %} 
+        <div class="card" style="width:60%;background-color:rgba(56,200,232,.30);">
+            <div class="card-body">
+              <div style="display: flex; justify-content: space-between;">
+                <h6 style="font-weight: 400; width:25%;">Sender</h6>
+                <h6 style="font-weight: 400;width:50%;text-align: left;">Message</h6>
+                <h6 style="font-weight: 400;width:25%; text-align: right;">Date</h6>
+              </div>
+            </div>
+        </div>
+        <!-- accordion start here -->
+        
+        {% for item in notification %}
+        <div id="accordion" style="width:60%;">
+            <div class="card" style="width:100%;border-bottom:2px solid rgba(56,200,232,.30); border-radius: 0;">
+              <div class="card-header" id="heading{{item.id}}" style="padding:0; height:50px;">
+                <div class="card-body" data-toggle="collapse" data-target="#collapse{{item.id}}" aria-expanded="true" aria-controls="collapse{{item.id}}">
+                    <div style="display: flex; justify-content: space-between;">
+                        <h6 style="font-weight: 500;font-size: 0.8rem;width:25%">{{item.sender}}</h6>
+                        <h6 style="font-weight: 500;font-size: 0.8rem; width:50%;text-align: left;">{{item.header}}</h6>
+                        <h6 style="font-weight: 500; font-size: 0.8rem; text-align: right;width:25%">{{item.date_added_normal}}</h6>
+                    </div>
+                  </div>
+              </div>
+          
+              <div id="collapse{{item.id}}" class="collapse" aria-labelledby="heading{{item.id}}" data-parent="#accordion">
+                <div class="card-body">
+                    {{item.message}}
+                </div>
+              </div>
+            </div>
+
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class='text-center alert alert-info' style="margin-top:50px;">You dont have any Notification for now. Thanks!</div>
+        {% endif %}
+        <!-- accordion ends here -->
+        
+    </div>
+    
+    <!-- mobile -->
+    <div class="dashboard-home-inner-mobile">
+        <div class="reg-header text-center"></a>Scanner</div>
+        <div class="col-12">
+                <!-- <a href="{% url 'scan_camera' %}" class="btn btn-success">Scanner</a> -->
+                
+                <form action="{% url 'scan_camera' %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class = "video-wrap" style="text-align:center;">
+                    <video id = "video" playsinline autoplay style="width:250px; margin:auto; margin-top:30%; border:3px solid #1773A6; border-radius:10px;"></video>
+                    </div>
+                    <div class = "controller" style="text-align:center;">
+                        <button class="btn btn-block mt-5" id = "snap" type="submit" style="width:100px; height:100px; border-radius:50%;margin:auto; background:#2AD2BE; border: 1px solid transparent;">Check</button>
+                    </div>
+                    <canvas id = "canvas" width = "100" height = "100" id="image" style="display:none;"></canvas>
+                    <!-- <button class="btn btn-block btn-primary mt-5 login_btn">Login122</button> -->
+                </form>
+        </div>
+        
+    </div>
+
+   
+        
+  </div>
+</div>
+<script>
+    'use strict';
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const snap = document.getElementById('snap');
+    const errorMsgElement = document.getElementById('span#ErrorMsg');
+    const constraints = {
+    audio:true,
+    video:{
+    width:250,height:200
+    }};
+    async function init()
+    {
+    try
+    {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    handleSuccess(stream);
+    }
+    catch(e)
+    {
+    errorMsgElement.innerHTML
+    =`navigator.getUserMedia.error:${e.toString()}`;
+    }
+    }
+    function handleSuccess(stream)
+    {
+    window.stream = stream;
+    video.srcObject = stream;
+    }
+    init();
+    var context = canvas.getContext('2d');
+    // setTimeout(
+    //     function(){ alert("Hello"); }, 
+    // 3000);
+    // snap.addEventListener("click",
+    //     function(){
+    //     context.drawImage(video, 0, 0, 100, 100);
+    //     }
+    // );
+    snap.addEventListener("click",
+        function(){
+            $('body').append('<div style="" id="loadingDiv"><div class="loader">Checking...</div></div>');
+            context.drawImage(video, 0, 0, 100, 100);
+            $(window).on('load', function(){
+            setTimeout(removeLoader, 450000); //wait for page load PLUS two seconds.
+            });
+        }
+    );
+
+//     $('body').append('<div style="" id="loadingDiv"><div class="loader">Loading...</div></div>');
+// $(window).on('load', function(){
+//   setTimeout(removeLoader, 2000); //wait for page load PLUS two seconds.
+// });
+        function removeLoader(){
+            $( "#loadingDiv" ).fadeOut(450000, function() {
+            // fadeOut complete. Remove the loading div
+            $( "#loadingDiv" ).remove(); //makes page more lightweight 
+        });  
+        }
+    </script>
+
+{% endblock %}
+
+
+
+
+
+
+
+

@@ -13,10 +13,13 @@
         border-color: transparent;
     }
     #qr-reader > div > span{
-        display: none!important;
+        /* display: none!important; */
     }
     #qr-reader > div{
         border:0!important;
+    }
+    #qr-reader__scan_region{
+        max-height:110px;
     }
     #qr-reader{
         border:0!important;
@@ -123,13 +126,36 @@
           <div class="reg-header text-center"></a>Scanner</div>
           <div class="col-12">
             <div id="qr-reader" style="width:100%; margin-top:5vh;"></div>
-            <div id="qr-reader-results"></div>
+            
           </div>
           
       </div>
   
      
           
+    </div>
+  </div>
+   <!-- Add Pickup Modal -->
+<div class="modal fade" id="scanModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Scanner Result</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" class="span-y">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            
+            <div class="col-12" style="text-align: center;">
+                <img src="{% static 'success.svg' %}" class="logo" alt="scan-logo" class="mt-5 mb-3" />
+                    <div id="qr-reader-results"></div>
+                    <h5 class="mb-5 mt-1" style="color: #1773A6;">This item is recyclable</h5>
+                    <h5 style="color: #1773A6;" class="mb-5 mt-1" >Recycle and earn</h5>
+                    <h5><img class="img-fluid" style="width:25px;" src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> 10.33</h5>
+            </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -143,7 +169,8 @@
                 ++countResults;
                 lastResult = qrCodeMessage;
                 resultContainer.innerHTML 
-                    += `<div>[${countResults}] - ${qrCodeMessage}</div>`;
+                    += `<div> ${qrCodeMessage}</div>`;
+                $('#scanModal').modal('show');
             }
         }
 

@@ -126,6 +126,20 @@
           <div class="reg-header text-center"></a>Scanner</div>
           <div class="col-12">
             <div id="qr-reader" style="width:100%; margin-top:5vh;"></div>
+            <input id="geo2" name="geo2" type="text" value="55.8627,4.2433" hidden>
+            
+              {% if userman %}
+              {% for item in userman %} 
+              <form name="form" action="#" id="form_have_product" method="POST">
+                {% csrf_token %}
+                <input name="recipient" id="recipient_{{item.email}}" type="text" value="{{item.email}}" hidden />
+                <input name="amount" id="amount" type="text" value="0.99" hidden/>
+                <input name="qrcode" id="qrcode" type="text" hidden/>
+            </form>
+            {% endfor %}
+            {% else %}
+
+          {% endif %}
             
           </div>
           
@@ -149,10 +163,26 @@
             
             <div class="col-12" style="text-align: center;">
                 <img src="{% static 'success.svg' %}" class="logo" alt="scan-logo" class="mt-5 mb-3" />
-                    <div id="qr-reader-results"></div>
-                    <h5 class="mb-5 mt-1" style="color: #1773A6;">This item is recyclable</h5>
-                    <h5 style="color: #1773A6;" class="mb-5 mt-1" >Recycle and earn</h5>
-                    <h5><img class="img-fluid" style="width:25px;" src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> 10.33</h5>
+                    <div id="qr-reader-results" style="display: none;"></div>
+                    <!-- <h5 class="mb-5 mt-1" style="color: #1773A6;">You have just earned <img class="img-fluid" style="width:25px;" src="{% static 'wastecoin-currency.svg' %}" class="logo" alt="allocation-logo" /> 0.99</p></h5> -->
+                    <!-- <h5 style="color: #1773A6;" class="mb-5 mt-1" >Recycle and earn</h5> -->
+                    <!-- <h5></h5> -->
+                    <h6 style="color: #01920d70; font-size:0.9rem;" class="mb-3 mt-1" id="qrcode_messaging"></h6>
+                    <h6 style="color: #a6177b; font-size:0.9rem;" class="mb-3 mt-1" id="messaging"></h6>
+                    <h6 style="color: #1773A6;" class="mb-3 mt-1">Kindly locate the closest Recycling hub to your current location</h6>
+                    <div class="row">
+                        <div style="display: flex; justify-content: left;width:100%;">
+                            <div style="width:10%; padding:10px 5px;"><img class="img-fluid" src="{% static 'location.svg' %}"  class="logo" alt="allocation-logo" /></div>
+                            <div style="width:70%; text-align: left; padding-left:20px; line-height: 2.8rem;">Current Location</div>
+                        </div>
+                        <div style="display: flex; justify-content: left;width:100%;">
+                            <div style="width:10%; padding:10px 5px;"><img class="img-fluid" src="{% static 'location2.svg' %}"  class="logo" alt="allocation-logo" /></div>
+                            <div style="width:70%; text-align: left; padding-left:20px;">HGB4, Sterling street, Glasgow</div>
+                            <div style="width:20%; text-align: left;"><h5 style="color: #1773A6; font-size:0.9rem; line-height: 2.2rem;" id="dis" ></h5></div>
+                        </div>
+                    </div>
+                    
+                    
             </div>
         </div>
       </div>
@@ -162,22 +192,99 @@
     <script type="text/javascript">
 
         var resultContainer = document.getElementById('qr-reader-results');
-        var lastResult, countResults = 0;
+        var amountContainer = document.getElementById('amount');
 
         function onScanSuccess(qrCodeMessage) {
-            if (qrCodeMessage !== lastResult) {
-                ++countResults;
-                lastResult = qrCodeMessage;
-                resultContainer.innerHTML 
-                    += `<div> ${qrCodeMessage}</div>`;
-                $('#scanModal').modal('show');
+            if (qrCodeMessage) {
+                var qrcode = document.getElementById('qrcode').value =qrCodeMessage;
+                console.log("qrcode: "+ qrcode);
+                $.ajax({
+                    url:'/send_coins_scanner/',
+                    type:'POST',
+                    data: $('#form_have_product').serialize(),
+                    success:function(response){
+                        console.log(response);
+                        var amount = 0.99;
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(showPosition, showError);
+                        } else {
+                            var status = document.getElementById("demo");
+                            status.innerHTML = "Geolocation is not supported by this browser.";
+                        }
+                        resultContainer.innerHTML 
+                            += `<div> ${qrCodeMessage}</div>`;
+                            var amountContainer = document.getElementById('amount');
+                            amountContainer.innerHTML = amount;
+                            openModal(response);
+                        
+                    },
+                    error:function(e){
+                        console.log(e);
+                    },
+                });
+                
             }
+            
         }
-
+        function openModal(scan_result){
+            $('#messaging').text(scan_result.message);
+            // $('#amount').text(scan_result.amount);
+            $('#qrcode_messaging').text("QRCODE: "+scan_result.qrcode);
+            $('#scanModal').modal('show');
+        };
         var html5QrcodeScanner = new Html5QrcodeScanner(
             "qr-reader", { fps: 10, qrbox: 250 });
         html5QrcodeScanner.render(onScanSuccess);
+        function showPosition(position) {
+	    var geoPoint = position.coords.latitude + "," + position.coords.longitude;
+	    var geo2 = $("#geo2").val().split(",");
+	    var distance = distanceBetween(position.coords.latitude, position.coords.longitude, geo2[0], geo2[1], "K");
+	    console.log("geo dis: " + distance);
+	    $("#dis").html( distance + "Km");
 
+	  }
+
+	  function distanceBetween(lat1, lon1, lat2, lon2, unit) {
+	    var rlat1 = Math.PI * lat1 / 180
+	    var rlat2 = Math.PI * lat2 / 180
+	    var rlon1 = Math.PI * lon1 / 180
+	    var rlon2 = Math.PI * lon2 / 180
+	    var theta = lon1 - lon2
+	    var rtheta = Math.PI * theta / 180
+	    var dist = Math.sin(rlat1) * Math.sin(rlat2) + Math.cos(rlat1) * Math.cos(rlat2) * Math.cos(rtheta);
+	    dist = Math.acos(dist)
+	    dist = dist * 180 / Math.PI
+	    dist = dist * 60 * 1.1515
+	    if (unit == "K") {
+	      dist = dist * 1.609344
+	    }
+	    if (unit == "N") {
+	      dist = dist * 0.8684
+	    }
+	    return  Math.ceil(dist)
+	  }
+ 
+  
+
+
+        // show our errors for debuging
+        function showError(error) {
+            var x = document.getElementById("demo");
+            switch (error.code) {
+            case error.PERMISSION_DENIED:
+                x.innerHTML = "Denied the request for Geolocation. Maybe, ask the user in a more polite way?"
+                break;
+            case error.POSITION_UNAVAILABLE:
+                x.innerHTML = "Location information is unavailable.";
+                break;
+            case error.TIMEOUT:
+                x.innerHTML = "The request to get location timed out.";
+                break;
+            case error.UNKNOWN_ERROR:
+                x.innerHTML = "An unknown error occurred :(";
+                break;
+            }
+        }
     </script>
 
 {% endblock %}

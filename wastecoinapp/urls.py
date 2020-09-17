@@ -27,7 +27,6 @@ urlpatterns = [
     path("wallet", views.wallet, name="wallet"),
     path("wallet_agent", views.wallet_agent, name="wallet_agent"),
     path("scanner", views.scanner, name="scanner"),
-    path("scan_camera", views.scanner_camera, name="scan_camera"),
     path("notification", views.notification, name="notification"),
     path("signout", views.signout, name="signout"),
     path("update_biodata", views.update_biodata, name="update_biodata"),
@@ -41,6 +40,8 @@ urlpatterns = [
     path("update_agent_account", views.update_agent_account, name="update_agent_account"),
 
     path("marketplace", views.marketplace, name="marketplace"),
+     # AJAX RELATED PATHS
+    path('send_coins_scanner/', views.send_coins_scanner, name="send_coins_scanner"),
     
 ]
 

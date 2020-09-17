@@ -5,7 +5,7 @@ from datetime import datetime,timezone
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.urls import reverse
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout, authenticate
@@ -476,43 +476,6 @@ def notification(request):
     return render(request,"notification.html", return_data) 
 
 
-     
-# scanner api
-@api_view(["POST"])
-def scanner_camera(request):
-    updateReadMessage=notifications.objects.filter(receiver=request.user).update(beenRead= "Yes")
-    notification_list = notifications.objects.filter(receiver=request.user)
-    page = request.GET.get('page', 1)
-    paginator = Paginator(notification_list, 5)
-    try:
-        notificationss = paginator.page(page)
-    except PageNotAnInteger:
-        notificationss = paginator.page(1)
-    except EmptyPage:
-        notificationss = paginator.page(paginator.num_pages)
-    agent = WastecoinAgent.objects.filter(user=request.user)
-    user = WastecoinUser.objects.filter(user=request.user)
-
-    # img=request.POST["image"]
-    # img= request.data.get('image',None)
-    readImg = cv2.imread('barcode.png')
-    # readImg = cv2.imread('barcode.png')
-    barcode = decode(readImg)
-    item_list = []
-    for item in barcode:
-        item_list.append(item[0])
-    
-    # myData = barcode.data.decode('utf-8')
-
-    return_data = {
-        "user":request.user,
-        "error": "0",
-        "notification": notificationss,
-        "userman": WastecoinUser.objects.filter(user=request.user),
-        "scanResult": item_list,
-        # "scanResult1": img
-        }
-    return render(request,"scanner_result.html", return_data) 
 
   
 
@@ -762,6 +725,30 @@ def update_agent_account(request):
             "userman": WastecoinAgent.objects.filter(user=request.user)
         }
     return render(request,"profile_agent.html", return_data) 
+
+# Send Coin from Scanner
+def send_coins_scanner(request):
+    # pickupItems = BookPickupScheldule.objects.all()
+
+    if request.method == 'POST' and request.is_ajax():
+
+        recipient= request.POST.get('recipient')
+        amount= request.POST.get('amount')
+        qrcode= request.POST.get('qrcode')
+        payee=User.objects.get(username= recipient)
+        payeeFirstName =WastecoinUser.objects.get(user=payee).firstname
+        payeeLastName =WastecoinUser.objects.get(user=payee).lastname
+        UserWastecoinBalance =float(WastecoinUser.objects.get(user=payee).currentUserWastecoinBalance)
+        newUserWastecoinBalance = UserWastecoinBalance + float(amount)
+        WastecoinUser.objects.filter(user=payee).update(currentUserWastecoinBalance=newUserWastecoinBalance)
+        g = Transaction(recipient=recipient, sender="Admin", amount=amount) 
+        g.save()
+        m = minedCoin(miner=recipient, creditedBy="admin", minedCoin=amount) 
+        m.save()
+        return JsonResponse({ 'message' :"Dear "+str(payeeFirstName)+" ! "+str(amount) +"WC has been Successfully paid into your wallet!", 'amount': amount, 'qrcode': qrcode })
+    else:
+        return_data = {"message": "An error occurred"}
+        return render(request,"scanner.html", return_data)
 
 # send coin (Agent)
 @api_view(["POST"])

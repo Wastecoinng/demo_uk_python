@@ -6,7 +6,7 @@ psycopg2==2.8.4
 pytz==2019.3
 sqlparse==0.3.0
 whitenoise==5.0.1
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 django-mathfilters==1.0.0
 bcrypt==3.1.7
 authy==2.2.3
